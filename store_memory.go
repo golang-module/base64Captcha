@@ -88,12 +88,10 @@ func (s *memoryStore) collect() {
 }
 
 func (s *memoryStore) collectOne(e *list.Element, specifyTime time.Time) *list.Element {
-
 	ev, ok := e.Value.(idByTimeValue)
 	if !ok {
 		return nil
 	}
-
 	if ev.timestamp.Add(s.expiration).Before(specifyTime) {
 		delete(s.digitsById, ev.id)
 		next := e.Next()
