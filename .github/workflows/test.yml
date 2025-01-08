@@ -20,13 +20,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cleanup workspace
-        run: rm -rf /tmp/go-build*
-
       - name: Create coverage file
-        run: go test -coverprofile='coverage.txt' -covermode=atomic
+        run: go test -coverprofile=$GITHUB_WORKSPACE/coverage.txt -covermode=atomic ./...
 
       - name: Upload coverage file
         uses: codecov/codecov-action@v5
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: golang-module/base64Captcha
