@@ -1,28 +1,27 @@
-name: Run tests and upload coverage
-
-on:
-  push
-
+on: [ push, pull_request ]
+name: Test
 jobs:
   test:
-    name: Run tests and collect coverage
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.platform }}
+    env:
+      GO111MODULE: on
+      GOPROXY: https://goproxy.cn
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Go
+      - name: Set up go
         uses: actions/setup-go@v5
 
-      - name: Install dependencies
-        run: go mod download
+      - name: Create coverage reports
+        run: go test -coverprofile='coverage.txt' -covermode=atomic
 
-      - name: Run tests
-        run: go test -coverprofile=coverage.txt
-
-      - name: Upload results to Codecov
+      - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
