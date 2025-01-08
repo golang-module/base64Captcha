@@ -46,7 +46,7 @@ func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
 	return id, a, a
 }
 
-// GenerateIdQuestionAnswer creates captcha content and answer
+// GenerateSpecificIdQuestionAnswer creates captcha content and answer
 func (d *DriverDigit) GenerateSpecificIdQuestionAnswer(mId string) (id, q, a string) {
 	id = mId
 	digits := randomDigits(d.Length)
@@ -58,21 +58,21 @@ func (d *DriverDigit) GenerateSpecificIdQuestionAnswer(mId string) (id, q, a str
 func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Initialize PRNG.
 	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
-	//parse digits to string
+	// parse digits to string
 	digits := stringToFakeByte(content)
 
 	itemDigit.calculateSizes(d.Width, d.Height, len(digits))
 	// Randomly position captcha inside the image.
-	maxx := d.Width - (itemDigit.width+itemDigit.dotSize)*len(digits) - itemDigit.dotSize
-	maxy := d.Height - itemDigit.height - itemDigit.dotSize*2
+	maxX := d.Width - (itemDigit.width+itemDigit.dotSize)*len(digits) - itemDigit.dotSize
+	maxY := d.Height - itemDigit.height - itemDigit.dotSize*2
 	var border int
 	if d.Width > d.Height {
 		border = d.Height / 5
 	} else {
 		border = d.Width / 5
 	}
-	x := rand.Intn(maxx-border*2) + border
-	y := rand.Intn(maxy-border*2) + border
+	x := rand.Intn(maxX-border*2) + border
+	y := rand.Intn(maxY-border*2) + border
 	// Draw digits.
 	for _, n := range digits {
 		itemDigit.drawDigit(digitFontData[n], x, y)
