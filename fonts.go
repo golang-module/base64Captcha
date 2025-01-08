@@ -1,8 +1,6 @@
 package captcha
 
 import (
-	"math/rand"
-
 	"github.com/golang/freetype/truetype"
 )
 
@@ -31,7 +29,7 @@ func randFontFrom(fonts []*truetype.Font) *truetype.Font {
 		fonts = fontsAll
 		fontCount = len(fontsAll)
 	}
-	index := rand.Intn(fontCount)
+	index := randIntn(fontCount)
 	return fonts[index]
 }
 

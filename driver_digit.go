@@ -57,8 +57,8 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	} else {
 		border = d.Width / 5
 	}
-	x := rand.Intn(maxX-border*2) + border
-	y := rand.Intn(maxY-border*2) + border
+	x := randIntn(maxX-border*2) + border
+	y := randIntn(maxY-border*2) + border
 	// Draw digits.
 	for _, n := range digits {
 		itemDigit.drawDigit(digitFontData[n], x, y)

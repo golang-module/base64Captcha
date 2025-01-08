@@ -1,7 +1,6 @@
 package captcha
 
 import (
-	"math/rand"
 	"reflect"
 	"testing"
 )
@@ -13,7 +12,7 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 	}
 
 	dDigit := DriverDigit{80, 240, 5, 0.7, 5}
-	audioDriver := NewDriverAudio(rand.Intn(5), "en")
+	audioDriver := NewDriverAudio(randIntn(5), "en")
 	tests := []struct {
 		name     string
 		fields   fields

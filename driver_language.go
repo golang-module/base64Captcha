@@ -1,11 +1,9 @@
 package captcha
 
 import (
+	"github.com/golang/freetype/truetype"
 	"image/color"
 	"log"
-	"math/rand"
-
-	"github.com/golang/freetype/truetype"
 )
 
 // https://en.wikipedia.org/wiki/Unicode_block
@@ -33,7 +31,7 @@ func generateRandomRune(size int, code string) string {
 	end := lang[1]
 	randRune := make([]rune, size)
 	for i := range randRune {
-		idx := rand.Intn(end-start) + start
+		idx := randIntn(end-start) + start
 		randRune[i] = rune(idx)
 	}
 	return string(randRune)
