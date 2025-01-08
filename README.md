@@ -1,11 +1,11 @@
 # Captcha  #
 
-[![Carbon Release](https://img.shields.io/github/release/dromara/carbon.svg)](https://github.com/dromara/carbon/releases)
-[![Go Test](https://github.com/dromara/carbon/actions/workflows/test.yml/badge.svg)](https://github.com/dromara/carbon/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/dromara/carbon/v2)](https://goreportcard.com/report/github.com/dromara/carbon/v2)
-[![Go Coverage](https://codecov.io/gh/dromara/carbon/branch/master/graph/badge.svg)](https://codecov.io/gh/dromara/carbon)
-[![Carbon Doc](https://img.shields.io/badge/go.dev-reference-brightgreen?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/dromara/carbon/v2)
-[![License](https://img.shields.io/github/license/dromara/carbon)](https://github.com/dromara/carbon/blob/master/LICENSE)
+[![Carbon Release](https://img.shields.io/github/release/golang-module/base64Captcha.svg)](https://github.com/golang-module/base64Captcha/releases)
+[![Go Test](https://github.com/golang-module/base64Captcha/actions/workflows/test.yml/badge.svg)](https://github.com/golang-module/base64Captcha/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/golang-module/base64Captcha)](https://goreportcard.com/report/github.com/golang-module/base64Captcha)
+[![Go Coverage](https://codecov.io/gh/golang-module/base64Captcha/branch/master/graph/badge.svg)](https://codecov.io/gh/golang-module/base64Captcha)
+[![Carbon Doc](https://img.shields.io/badge/go.dev-reference-brightgreen?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/golang-module/base64Captcha)
+[![License](https://img.shields.io/github/license/golang-module/base64Captcha)](https://github.com/golang-module/base64Captcha/blob/master/LICENSE)
 
 #### 项目简介
 
