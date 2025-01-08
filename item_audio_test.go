@@ -59,7 +59,7 @@ func TestItemAudio_longestDigitSndLen(t *testing.T) {
 	newB := []byte{}
 	for {
 		idx := num % base
-		bbb := []byte{byte(baseS[idx])}
+		bbb := []byte{baseS[idx]}
 		newB = append(bbb, newB...)
 		num = num / base
 		if num == 0 {
