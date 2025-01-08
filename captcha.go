@@ -50,7 +50,7 @@ func (c *Captcha) Generate() (id, b64s, answer string, err error) {
 // You may want to call `store.Verify` method instead.
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 	vv := c.Store.Get(id, clear)
-	//fix issue for some redis key-value string value
+	// fix issue for some redis key-value string value
 	vv = strings.TrimSpace(vv)
 	return vv == strings.TrimSpace(answer)
 }

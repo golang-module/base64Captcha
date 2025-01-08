@@ -44,7 +44,7 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 	lineColor := RandLightColor()
 
 	x1 := float64(rand.Intn(first))
-	//y1 := float64(rand.Intn(y)+y);
+	// y1 := float64(rand.Intn(y)+y);
 
 	x2 := float64(rand.Intn(first) + end)
 
@@ -76,13 +76,13 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 func (item *ItemChar) drawSineLine() *ItemChar {
 	var py float64
 
-	//振幅
+	// 振幅
 	a := rand.Intn(item.height / 2)
 
-	//Y轴方向偏移量
+	// Y轴方向偏移量
 	b := random(int64(-item.height/4), int64(item.height/4))
 
-	//X轴方向偏移量
+	// X轴方向偏移量
 	f := random(int64(-item.height/4), int64(item.height/4))
 	// 周期
 	var t float64
@@ -107,7 +107,7 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 			i := item.height / 5
 			for i > 0 {
 				item.nrgba.Set(px+i, int(py), c)
-				//fmt.Println(px + i,int(py) )
+				// fmt.Println(px + i,int(py) )
 				i--
 			}
 		}
@@ -201,7 +201,7 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 	return nil
 }
 
-//drawText draw captcha string to image.把文字写入图像验证码
+// drawText draw captcha string to image.把文字写入图像验证码
 
 func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 	c := freetype.NewContext()

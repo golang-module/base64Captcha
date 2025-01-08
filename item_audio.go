@@ -18,7 +18,7 @@ type ItemAudio struct {
 	answer      string
 	body        *bytes.Buffer
 	digitSounds [][]byte
-	//rng         siprng
+	// rng         siprng
 }
 
 // newAudio returns a new audio captcha with the given digits, where each digit
@@ -80,7 +80,7 @@ func (a *ItemAudio) makeBackgroundSound(length int) []byte {
 	b := a.makeWhiteNoise(length, 4)
 	for i := 0; i < length/(sampleRate/10); i++ {
 		snd := reversedSound(a.digitSounds[rand.Intn(10)])
-		//snd = changeSpeed(snd, a.rng.Float(0.8, 1.2))
+		// snd = changeSpeed(snd, a.rng.Float(0.8, 1.2))
 		place := rand.Intn(len(b) - len(snd))
 		setSoundLevel(snd, randFloat64Range(0.04, 0.08))
 		mixSound(b[place:], snd)

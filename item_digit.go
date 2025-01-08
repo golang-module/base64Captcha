@@ -26,13 +26,13 @@ type ItemDigit struct {
 	dotSize  int
 	dotCount int
 	maxSkew  float64
-	//rng      siprng
+	// rng      siprng
 }
 
 // NewItemDigit create a instance of item-digit
 func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDigit {
 	itemDigit := &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
-	//init image.Paletted
+	// init image.Paletted
 	itemDigit.Paletted = image.NewPaletted(image.Rect(0, 0, width, height), createRandPaletteColors(dotCount))
 	return itemDigit
 }
@@ -136,11 +136,11 @@ func (m *ItemDigit) fillWithCircles(n, maxradius int) {
 	maxx := m.Bounds().Max.X
 	maxy := m.Bounds().Max.Y
 	for i := 0; i < n; i++ {
-		//colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
+		// colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
 		colorIdx := uint8(randIntRange(1, m.dotCount-1))
-		//r := m.rng.Int(1, maxradius)
+		// r := m.rng.Int(1, maxradius)
 		r := randIntRange(1, maxradius)
-		//m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
+		// m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
 		m.drawCircle(randIntRange(r, maxx-r), randIntRange(r, maxy-r), r, colorIdx)
 	}
 }
@@ -156,7 +156,7 @@ func (m *ItemDigit) strikeThrough() {
 		xo := amplitude * math.Cos(float64(y)*dx)
 		yo := amplitude * math.Sin(float64(x)*dx)
 		for yn := 0; yn < m.dotSize; yn++ {
-			//r := m.rng.Int(0, m.dotSize)
+			// r := m.rng.Int(0, m.dotSize)
 			r := rand.Intn(m.dotSize)
 			m.drawCircle(x+int(xo), y+int(yo)+(yn*m.dotSize), r/2, 1)
 		}

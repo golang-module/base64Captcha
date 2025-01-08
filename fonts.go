@@ -27,7 +27,7 @@ func randFontFrom(fonts []*truetype.Font) *truetype.Font {
 	fontCount := len(fonts)
 
 	if fontCount == 0 {
-		//loading default fonts
+		// loading default fonts
 		fonts = fontsAll
 		fontCount = len(fontsAll)
 	}
