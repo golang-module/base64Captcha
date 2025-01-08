@@ -13,12 +13,16 @@ type Captcha struct {
 }
 
 // NewCaptcha creates a captcha instance from driver and store
-func NewCaptcha(driver Driver, store Store) *Captcha {
-	return &Captcha{Driver: driver, Store: store}
+func NewCaptcha(driver Driver, store ...Store) *Captcha {
+	if len(store) == 0 {
+		store = make([]Store, 1)
+		store[0] = DefaultMemStore
+	}
+	return &Captcha{Driver: driver, Store: store[0]}
 }
 
 // Generate generates a random id, base64 image string or an error if any
-func (c *Captcha) Generate() (id, b64s, answer string, err error) {
+func (c *Captcha) Generate() (id, src, answer string, err error) {
 	id, content, answer := c.Driver.GenerateIdQuestionAnswer()
 	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
@@ -28,7 +32,7 @@ func (c *Captcha) Generate() (id, b64s, answer string, err error) {
 	if err != nil {
 		return
 	}
-	b64s = item.EncodeB64string()
+	src = item.EncodeB64string()
 	return
 }
 
