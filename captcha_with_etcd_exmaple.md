@@ -1,7 +1,7 @@
 # Captcha with Etcd as store example
 
-
 ## captcha/captcha_etcd.go
+
 ```go
 package captcha
 
@@ -14,13 +14,13 @@ import (
 	"time"
 )
 
-//CaptchaEtcd base64 captcha with etcd
+// CaptchaEtcd base64 captcha with etcd
 type CaptchaEtcd struct {
 	*base64Captcha.DriverString
 	store *etcd.Client
 }
 
-//NewClientEtcd constructor
+// NewClientEtcd constructor
 func NewClientEtcd(height, width int, store *etcd.Client) *CaptchaEtcd {
 	d := base64Captcha.NewDriverString(height, width, 0, 0, 4, "%#=qwe23456789rtyupasdfghjkzxcvbnm", &color.RGBA{0, 0, 0, 0}, []string{"wqy-microhei.ttc"})
 	cli := &CaptchaEtcd{store: store}
@@ -33,14 +33,14 @@ const (
 	requestTimeout = time.Second
 )
 
-//GenerateIdAndImage create image
+// GenerateIdAndImage create image
 func (c *CaptchaEtcd) GenerateIdAndImage() (id, b64s, ans string, err error) {
 	id, content, answer := c.GenerateIdQuestionAnswer()
 	item, err := c.DrawCaptcha(content)
 	if err != nil {
 		return "", "", "", err
 	}
-	//expire in 120s
+	// expire in 120s
 	grantResp, err := c.store.Grant(context.TODO(), 120)
 	if err != nil {
 		return "", "", "", err
@@ -55,7 +55,7 @@ func (c *CaptchaEtcd) GenerateIdAndImage() (id, b64s, ans string, err error) {
 	return id, b64s, answer, nil
 }
 
-//Verify check captcha answer
+// Verify check captcha answer
 func (c *CaptchaEtcd) Verify(id, answer string) (match bool, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), requestTimeout)
 	key := captchaPrefix + id
