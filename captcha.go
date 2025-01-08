@@ -6,6 +6,9 @@ package base64Captcha
 
 import "strings"
 
+// Version current version
+const Version = "1.3.8"
+
 // Captcha basic information.
 type Captcha struct {
 	Driver Driver
