@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-
 	"image"
 	"image/color"
 	"image/draw"
@@ -14,6 +13,7 @@ import (
 	"log"
 	"math"
 
+	fontLoader "github.com/golang-module/base64Captcha/fonts"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
@@ -31,7 +31,7 @@ type ItemChar struct {
 func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	d := ItemChar{width: w, height: h}
 	m := image.NewNRGBA(image.Rect(0, 0, w, h))
-	draw.Draw(m, m.Bounds(), &image.Uniform{bgColor}, image.Point{}, draw.Src)
+	draw.Draw(m, m.Bounds(), &image.Uniform{C: bgColor}, image.Point{}, draw.Src)
 	d.nrgba = m
 	return &d
 }
@@ -94,7 +94,7 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 	} else {
 		t = random(int64(item.height), int64(item.width/2))
 	}
-	w := float64((2 * math.Pi) / t)
+	w := (2 * math.Pi) / t
 
 	// 曲线横坐标起始位置
 	px1 := 0
@@ -256,4 +256,16 @@ func (item *ItemChar) EncodeB64string() string {
 type point struct {
 	X int
 	Y int
+}
+
+func randFontFrom(fonts []*truetype.Font) *truetype.Font {
+	fontCount := len(fonts)
+
+	if fontCount == 0 {
+		// loading default fonts
+		fonts = fontLoader.DefaultSource.LoadAll()
+		fontCount = len(fonts)
+	}
+	index := randIntn(fontCount)
+	return fonts[index]
 }

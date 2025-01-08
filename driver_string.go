@@ -4,6 +4,7 @@ import (
 	"image/color"
 	"strings"
 
+	fontLoader "github.com/golang-module/base64Captcha/fonts"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -30,50 +31,29 @@ type DriverString struct {
 	// BgColor captcha image background color (optional)
 	BgColor *color.RGBA
 
-	// fontsStorage font storage (optional)
-	fontsStorage FontsStorage
-
 	// Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
 }
 
 // NewDriverString creates driver
-func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fontsStorage FontsStorage, fonts []string) *DriverString {
-	if fontsStorage == nil {
-		fontsStorage = DefaultEmbeddedFonts
+func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverString {
+	defaultSource := fontLoader.DefaultSource
+	fontsArray := defaultSource.LoadFonts(fonts)
+	if len(fontsArray) == 0 {
+		fontsArray = defaultSource.LoadAll()
 	}
-
-	var tfs []*truetype.Font
-	for _, fff := range fonts {
-		tf := fontsStorage.LoadFontByName("fonts/" + fff)
-		tfs = append(tfs, tf)
-	}
-
-	if len(tfs) == 0 {
-		tfs = fontsAll
-	}
-
-	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs, Fonts: fonts}
+	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: fontsArray, Fonts: fonts}
 }
 
 // ConvertFonts loads fonts by names
 func (d *DriverString) ConvertFonts() *DriverString {
-	if d.fontsStorage == nil {
-		d.fontsStorage = DefaultEmbeddedFonts
+	defaultSource := fontLoader.DefaultSource
+	fontsArray := defaultSource.LoadFonts(d.Fonts)
+	if len(fontsArray) == 0 {
+		fontsArray = defaultSource.LoadAll()
 	}
-
-	var tfs []*truetype.Font
-	for _, fff := range d.Fonts {
-		tf := d.fontsStorage.LoadFontByName("fonts/" + fff)
-		tfs = append(tfs, tf)
-	}
-	if len(tfs) == 0 {
-		tfs = fontsAll
-	}
-
-	d.fontsArray = tfs
-
+	d.fontsArray = fontsArray
 	return d
 }
 

@@ -4,6 +4,7 @@ import (
 	"image/color"
 	"strings"
 
+	fontLoader "github.com/golang-module/base64Captcha/fonts"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -29,49 +30,29 @@ type DriverChinese struct {
 	// BgColor captcha image background color (optional)
 	BgColor *color.RGBA
 
-	// fontsStorage font storage (optional)
-	fontsStorage FontsStorage
-
 	// Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
 }
 
 // NewDriverChinese creates a driver of Chinese characters
-func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fontsStorage FontsStorage, fonts []string) *DriverChinese {
-	if fontsStorage == nil {
-		fontsStorage = DefaultEmbeddedFonts
+func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverChinese {
+	defaultSource := fontLoader.DefaultSource
+	fontsArray := defaultSource.LoadFonts(fonts)
+	if len(fontsArray) == 0 {
+		fontsArray = defaultSource.LoadAll()
 	}
-
-	var tfs []*truetype.Font
-	for _, fff := range fonts {
-		tf := fontsStorage.LoadFontByName("fonts/" + fff)
-		tfs = append(tfs, tf)
-	}
-
-	if len(tfs) == 0 {
-		tfs = fontsAll
-	}
-
-	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs}
+	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: fontsArray}
 }
 
 // ConvertFonts loads fonts by names
 func (d *DriverChinese) ConvertFonts() *DriverChinese {
-	if d.fontsStorage == nil {
-		d.fontsStorage = DefaultEmbeddedFonts
+	defaultSource := fontLoader.DefaultSource
+	fontsArray := defaultSource.LoadFonts(d.Fonts)
+	if len(fontsArray) == 0 {
+		fontsArray = defaultSource.LoadAll()
 	}
-
-	var tfs []*truetype.Font
-	for _, fff := range d.Fonts {
-		tf := d.fontsStorage.LoadFontByName("fonts/" + fff)
-		tfs = append(tfs, tf)
-	}
-	if len(tfs) == 0 {
-		tfs = fontsAll
-	}
-	d.fontsArray = tfs
-
+	d.fontsArray = fontsArray
 	return d
 }
 
@@ -101,7 +82,6 @@ func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) 
 
 // DrawCaptcha generates captcha item(image)
 func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
-
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor

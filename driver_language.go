@@ -4,6 +4,7 @@ import (
 	"image/color"
 	"log"
 
+	fontLoader "github.com/golang-module/base64Captcha/fonts"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -57,17 +58,14 @@ type DriverLanguage struct {
 	// BgColor captcha image background color (optional)
 	BgColor *color.RGBA
 
-	// fontsStorage font storage (optional)
-	fontsStorage FontsStorage
-
 	// Fonts loads by name see fonts.go's comment
 	Fonts        []*truetype.Font
 	LanguageCode string
 }
 
 // NewDriverLanguage creates a driver
-func NewDriverLanguage(height int, width int, noiseCount int, showLineOptions int, length int, bgColor *color.RGBA, fontsStorage FontsStorage, fonts []*truetype.Font, languageCode string) *DriverLanguage {
-	return &DriverLanguage{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, BgColor: bgColor, fontsStorage: fontsStorage, Fonts: fonts, LanguageCode: languageCode}
+func NewDriverLanguage(height int, width int, noiseCount int, showLineOptions int, length int, bgColor *color.RGBA, fonts []*truetype.Font, languageCode string) *DriverLanguage {
+	return &DriverLanguage{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, BgColor: bgColor, Fonts: fonts, LanguageCode: languageCode}
 }
 
 // GenerateIdQuestionAnswer creates content and answer
@@ -102,10 +100,12 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 		itemChar.drawSineLine()
 	}
 
+	defaultSource := fontLoader.DefaultSource
+
 	// draw noise
 	if d.NoiseCount > 0 {
 		noise := RandText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
-		err = itemChar.drawNoise(noise, fontsAll)
+		err = itemChar.drawNoise(noise, defaultSource.LoadAll())
 		if err != nil {
 			return
 		}
@@ -113,6 +113,7 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 
 	// draw content
 	// use font that match your language
+	fontChinese := defaultSource.LoadChinese()
 	err = itemChar.drawText(content, []*truetype.Font{fontChinese})
 	if err != nil {
 		return
