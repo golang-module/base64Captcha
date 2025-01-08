@@ -36,7 +36,7 @@ func TestDriverAudio_DrawCaptcha(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-			itemWriteFile(gotItem, "_builds", tt.args.content, "wav")
+			_ = itemWriteFile(gotItem, "_builds", tt.args.content, "wav")
 		})
 	}
 }

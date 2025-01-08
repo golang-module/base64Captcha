@@ -53,7 +53,7 @@ func TestDriverDigit_DrawCaptcha(t *testing.T) {
 				t.Errorf("DriverDigit.DrawCaptcha() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			itemWriteFile(gotItem, "_builds", tt.args.content, "png")
+			_ = itemWriteFile(gotItem, "_builds", tt.args.content, "png")
 
 		})
 	}
