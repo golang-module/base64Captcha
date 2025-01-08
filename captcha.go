@@ -14,7 +14,7 @@
 
 // Package base64Captcha supports digits, numbers,alphabet, arithmetic, audio and digit-alphabet captcha.
 // base64Captcha is used for fast development of RESTful APIs, web apps and backend services in Go. give a string identifier to the package and it returns with a base64-encoding-png-string
-package base64Captcha
+package captcha
 
 import "strings"
 

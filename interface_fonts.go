@@ -1,6 +1,8 @@
-package base64Captcha
+package captcha
 
-import "github.com/golang/freetype/truetype"
+import (
+	"github.com/golang/freetype/truetype"
+)
 
 // FontsStorage interface for working with fonts
 type FontsStorage interface {

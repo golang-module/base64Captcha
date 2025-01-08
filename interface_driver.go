@@ -1,4 +1,4 @@
-package base64Captcha
+package captcha
 
 // Driver captcha interface for captcha engine to write staff
 type Driver interface {
