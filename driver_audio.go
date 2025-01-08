@@ -1,4 +1,4 @@
-package captcha
+package base64Captcha
 
 // DriverAudio captcha config for captcha-engine-audio.
 type DriverAudio struct {

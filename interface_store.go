@@ -1,4 +1,4 @@
-package captcha
+package base64Captcha
 
 // Store An object implementing Store interface can be registered with SetCustomStore
 // function to handle storage and retrieval of captcha ids and solutions for

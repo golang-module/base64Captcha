@@ -1,4 +1,4 @@
-package captcha
+package base64Captcha
 
 // This file has been generated from .wav files using generate.go.
 

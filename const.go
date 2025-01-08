@@ -1,4 +1,4 @@
-package captcha
+package base64Captcha
 
 const idLen = 20
 

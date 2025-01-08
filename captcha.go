@@ -1,8 +1,8 @@
 // fork from https://github.com/mojocn/base64Captcha
 
-// Package captcha supports digits, numbers,alphabet, arithmetic, audio and digit-alphabet captcha.
-// captcha is used for fast development of restfull APIs, web apps and backend services in Go. give a string identifier to the package, and it returns with a base64-encoding-png-string
-package captcha
+// Package base64Captcha supports digits, numbers,alphabet, arithmetic, audio and digit-alphabet captcha.
+// base64Captcha is used for fast development of restfull APIs, web apps and backend services in Go. give a string identifier to the package, and it returns with a base64-encoding-png-string
+package base64Captcha
 
 import "strings"
 

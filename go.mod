@@ -1,4 +1,4 @@
-module github.com/golang-module/captcha
+module github.com/golang-module/base64Captcha
 
 go 1.16
 
