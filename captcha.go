@@ -22,11 +22,11 @@ func (c *Captcha) Generate() (id, b64s, answer string, err error) {
 	id, content, answer := c.Driver.GenerateIdQuestionAnswer()
 	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
-		return "", "", "", err
+		return
 	}
 	err = c.Store.Set(id, answer)
 	if err != nil {
-		return "", "", "", err
+		return
 	}
 	b64s = item.EncodeB64string()
 	return
@@ -37,8 +37,7 @@ func (c *Captcha) Generate() (id, b64s, answer string, err error) {
 // if you have multiple captcha instances which share a same store.
 // You may want to call `store.Verify` method instead.
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
-	vv := c.Store.Get(id, clear)
+	value := c.Store.Get(id, clear)
 	// fix issue for some redis key-value string value
-	vv = strings.TrimSpace(vv)
-	return vv == strings.TrimSpace(answer)
+	return strings.TrimSpace(value) == strings.TrimSpace(answer)
 }
