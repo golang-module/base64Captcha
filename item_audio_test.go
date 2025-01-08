@@ -25,7 +25,7 @@ func Test_newAudio(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := newAudio(tt.args.id, tt.args.digits, tt.args.lang)
+			got := newAudio(tt.args.digits, tt.args.lang)
 			if got == nil {
 				t.Errorf("newAudio() = %v, want %v", got, tt.want)
 			}
@@ -34,7 +34,7 @@ func Test_newAudio(t *testing.T) {
 }
 
 func TestItemAudio_encodedLen(t *testing.T) {
-	ia := newAudio(RandomId(), randomDigits(3), "zh")
+	ia := newAudio(randomDigits(3), "zh")
 	tests := []struct {
 		name string
 		a    *ItemAudio
@@ -70,7 +70,7 @@ func TestItemAudio_longestDigitSndLen(t *testing.T) {
 }
 
 func TestItemAudio_WriteTo(t *testing.T) {
-	ia := newAudio(RandomId(), randomDigits(3), "zh")
+	ia := newAudio(randomDigits(3), "zh")
 	tests := []struct {
 		name    string
 		a       *ItemAudio
@@ -99,7 +99,7 @@ func TestItemAudio_WriteTo(t *testing.T) {
 }
 
 func TestItemAudio_EncodeB64string(t *testing.T) {
-	ia := newAudio(RandomId(), randomDigits(5), "en")
+	ia := newAudio(randomDigits(5), "en")
 
 	tests := []struct {
 		name string

@@ -1,9 +1,10 @@
 package captcha
 
 import (
-	"github.com/golang/freetype/truetype"
 	"image/color"
 	"log"
+
+	"github.com/golang/freetype/truetype"
 )
 
 // https://en.wikipedia.org/wiki/Unicode_block
@@ -37,7 +38,7 @@ func generateRandomRune(size int, code string) string {
 	return string(randRune)
 }
 
-// DriverLanguage generates language unicode by language
+// DriverLanguage generates language Unicode by language
 type DriverLanguage struct {
 	// Height png height in pixel.
 	Height int

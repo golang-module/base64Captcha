@@ -19,7 +19,7 @@ func NewDriverAudio(length int, language string) *DriverAudio {
 // DrawCaptcha creates audio captcha item
 func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
 	digits := stringToFakeByte(content)
-	audio := newAudio("", digits, d.Language)
+	audio := newAudio(digits, d.Language)
 	return audio, nil
 }
 

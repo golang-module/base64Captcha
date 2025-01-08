@@ -40,7 +40,7 @@ func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, b
 		fontsStorage = DefaultEmbeddedFonts
 	}
 
-	tfs := []*truetype.Font{}
+	var tfs []*truetype.Font
 	for _, fff := range fonts {
 		tf := fontsStorage.LoadFontByName("fonts/" + fff)
 		tfs = append(tfs, tf)
@@ -59,7 +59,7 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 		d.fontsStorage = DefaultEmbeddedFonts
 	}
 
-	tfs := []*truetype.Font{}
+	var tfs []*truetype.Font
 	for _, fff := range d.Fonts {
 		tf := d.fontsStorage.LoadFontByName("fonts/" + fff)
 		tfs = append(tfs, tf)

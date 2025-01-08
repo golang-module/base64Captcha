@@ -38,13 +38,13 @@ func (s StoreSyncMap) rmExpire() {
 	})
 }
 
-// Get get a string value
+// Set a string value
 func (s StoreSyncMap) Set(id string, value string) {
 	s.rmExpire()
 	s.m.Store(id, newSmv(value))
 }
 
-// Set a string value
+// Get a string value
 func (s StoreSyncMap) Get(id string, clear bool) string {
 	v, ok := s.m.Load(id)
 	if !ok {

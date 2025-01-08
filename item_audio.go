@@ -20,7 +20,7 @@ type ItemAudio struct {
 // must be in range 0-9. Digits are pronounced in the given language. If there
 // are no sounds for the given language, English is used.
 // Possible values for lang are "en", "ja", "ru", "zh".
-func newAudio(id string, digits []byte, lang string) *ItemAudio {
+func newAudio(digits []byte, lang string) *ItemAudio {
 	a := new(ItemAudio)
 
 	if sounds, ok := digitSounds[lang]; ok {
