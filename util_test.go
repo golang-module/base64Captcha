@@ -14,9 +14,7 @@ func Test_parseDigitsToString(t *testing.T) {
 		if len(s) != i {
 			t.Error("failed")
 		}
-
 	}
-
 }
 
 func Test_stringToFakeByte(t *testing.T) {

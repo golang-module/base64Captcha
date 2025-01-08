@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"io"
+	mathRand "math/rand"
 	"os"
 	"path/filepath"
 )
@@ -31,6 +32,13 @@ func randomDigits(length int) []byte {
 	return randomBytesMod(length, 10)
 }
 
+func randIntn(n int) int {
+	if n > 0 {
+		return mathRand.Intn(n)
+	}
+	return 0
+}
+
 // randomBytes returns a byte slice of the given length read from CSPRNG.
 func randomBytes(length int) (b []byte) {
 	b = make([]byte, length)
@@ -49,13 +57,13 @@ func randomBytesMod(length int, mod byte) (b []byte) {
 	if mod == 0 {
 		panic("captcha: bad mod argument for randomBytesMod")
 	}
-	maxrb := 255 - byte(256%int(mod))
+	maxRB := 255 - byte(256%int(mod))
 	b = make([]byte, length)
 	i := 0
 	for {
 		r := randomBytes(length + (length / 4))
 		for _, c := range r {
-			if c > maxrb {
+			if c > maxRB {
 				// Skip this number to avoid modulo bias.
 				continue
 			}
