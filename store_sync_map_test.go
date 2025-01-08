@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var tstore = NewStoreSyncMap(liveTime)
+var syncStore = NewStoreSyncMap(liveTime)
 var liveTime = time.Second * 2
 
 func TestNewStoreSyncMap(t *testing.T) {
@@ -19,7 +19,7 @@ func TestNewStoreSyncMap(t *testing.T) {
 		args args
 		want *StoreSyncMap
 	}{
-		{"new", args{liveTime}, tstore},
+		{"new", args{liveTime}, syncStore},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -31,8 +31,8 @@ func TestNewStoreSyncMap(t *testing.T) {
 }
 
 func TestStoreSyncMap_Get(t *testing.T) {
-	tstore.Set("1", "1")
-	tstore.Set("2", "2")
+	syncStore.Set("1", "1")
+	syncStore.Set("2", "2")
 
 	type fields struct {
 		liveTime time.Duration
@@ -48,9 +48,9 @@ func TestStoreSyncMap_Get(t *testing.T) {
 		args   args
 		want   string
 	}{
-		{"get", fields{liveTime, tstore.m}, args{"1", false}, "1"},
-		{"get", fields{liveTime, tstore.m}, args{"2", true}, "2"},
-		{"get", fields{liveTime, tstore.m}, args{"2", true}, ""},
+		{"get", fields{liveTime, syncStore.m}, args{"1", false}, "1"},
+		{"get", fields{liveTime, syncStore.m}, args{"2", true}, "2"},
+		{"get", fields{liveTime, syncStore.m}, args{"2", true}, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -65,12 +65,12 @@ func TestStoreSyncMap_Get(t *testing.T) {
 	}
 }
 func TestStoreSyncMap_Expire(t *testing.T) {
-	tstore.Set("2", "22")
-	if v := tstore.Get("2", false); v != "22" {
+	syncStore.Set("2", "22")
+	if v := syncStore.Get("2", false); v != "22" {
 		t.Error("failed")
 	}
 	time.Sleep(time.Second * 2)
-	if v := tstore.Get("2", false); v != "" {
+	if v := syncStore.Get("2", false); v != "" {
 		t.Error("expire failed")
 	}
 }
@@ -89,7 +89,7 @@ func TestStoreSyncMap_Set(t *testing.T) {
 		fields fields
 		args   args
 	}{
-		{"get", fields{liveTime, tstore.m}, args{"1", "1"}},
+		{"get", fields{liveTime, syncStore.m}, args{"1", "1"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -103,8 +103,8 @@ func TestStoreSyncMap_Set(t *testing.T) {
 }
 
 func TestStoreSyncMap_Verify(t *testing.T) {
-	tstore.Set("1", "1")
-	tstore.Set("2", "2")
+	syncStore.Set("1", "1")
+	syncStore.Set("2", "2")
 	type fields struct {
 		liveTime time.Duration
 		m        *sync.Map
@@ -120,10 +120,10 @@ func TestStoreSyncMap_Verify(t *testing.T) {
 		args   args
 		want   bool
 	}{
-		{"get", fields{liveTime, tstore.m}, args{"1", "1", true}, true},
-		{"get", fields{liveTime, tstore.m}, args{"1", "1", false}, false},
-		{"get", fields{liveTime, tstore.m}, args{"2", "2", true}, true},
-		{"get", fields{liveTime, tstore.m}, args{"2", "2", false}, false},
+		{"get", fields{liveTime, syncStore.m}, args{"1", "1", true}, true},
+		{"get", fields{liveTime, syncStore.m}, args{"1", "1", false}, false},
+		{"get", fields{liveTime, syncStore.m}, args{"2", "2", true}, true},
+		{"get", fields{liveTime, syncStore.m}, args{"2", "2", false}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
