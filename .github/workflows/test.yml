@@ -20,6 +20,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Cleanup workspace
+        run: rm -rf /tmp/go-build*
+
       - name: Create coverage file
         run: go test -coverprofile='coverage.txt' -covermode=atomic
 
