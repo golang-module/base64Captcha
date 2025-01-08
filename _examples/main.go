@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-//configJsonBody json request body.
+// configJsonBody json request body.
 type configJsonBody struct {
 	Id            string
 	CaptchaType   string
@@ -25,7 +25,7 @@ var store = base64Captcha.DefaultMemStore
 
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
-	//parse request parameters
+	// parse request parameters
 	decoder := json.NewDecoder(r.Body)
 	var param configJsonBody
 	err := decoder.Decode(&param)
@@ -35,7 +35,7 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var driver base64Captcha.Driver
 
-	//choose driver
+	// choose driver
 	switch param.CaptchaType {
 	case "audio":
 		driver = param.DriverAudio
@@ -49,7 +49,7 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 		driver = param.DriverDigit
 	}
 	c := base64Captcha.NewCaptcha(driver, store)
-	id, b64s,_, err := c.Generate()
+	id, b64s, _, err := c.Generate()
 	body := map[string]interface{}{"code": 1, "data": b64s, "captchaId": id, "msg": "success"}
 	if err != nil {
 		body = map[string]interface{}{"code": 0, "msg": err.Error()}
@@ -61,7 +61,7 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 // base64Captcha verify http handler
 func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 
-	//parse request parameters
+	// parse request parameters
 	decoder := json.NewDecoder(r.Body)
 	var param configJsonBody
 	err := decoder.Decode(&param)
@@ -69,27 +69,27 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	defer r.Body.Close()
-	//verify the captcha
+	// verify the captcha
 	body := map[string]interface{}{"code": 0, "msg": "failed"}
 	if store.Verify(param.Id, param.VerifyValue, true) {
 		body = map[string]interface{}{"code": 1, "msg": "ok"}
 	}
 
-	//set json response
+	// set json response
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	json.NewEncoder(w).Encode(body)
 }
 
-//start a net/http server
+// start a net/http server
 func main() {
-	//serve Vuejs+ElementUI+Axios Web Application
+	// serve Vuejs+ElementUI+Axios Web Application
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
-	//api for create captcha
+	// api for create captcha
 	http.HandleFunc("/api/getCaptcha", generateCaptchaHandler)
 
-	//api for verify captcha
+	// api for verify captcha
 	http.HandleFunc("/api/verifyCaptcha", captchaVerifyHandle)
 
 	fmt.Println("Server is at :8777")

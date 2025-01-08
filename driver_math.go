@@ -11,25 +11,25 @@ import (
 
 // DriverMath captcha config for captcha math
 type DriverMath struct {
-	//Height png height in pixel.
+	// Height png height in pixel.
 	Height int
 
 	// Width Captcha png width in pixel.
 	Width int
 
-	//NoiseCount text noise count.
+	// NoiseCount text noise count.
 	NoiseCount int
 
-	//ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
+	// ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
 	ShowLineOptions int
 
-	//BgColor captcha image background color (optional)
+	// BgColor captcha image background color (optional)
 	BgColor *color.RGBA
 
-	//fontsStorage font storage (optional)
+	// fontsStorage font storage (optional)
 	fontsStorage FontsStorage
 
-	//Fonts loads by name see fonts.go's comment
+	// Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
 }
@@ -110,12 +110,12 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
-	//波浪线 比较丑
+	// 波浪线 比较丑
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
 		itemChar.drawHollowLine()
 	}
 
-	//背景有文字干扰
+	// 背景有文字干扰
 	if d.NoiseCount > 0 {
 		noise := RandText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
 		err = itemChar.drawNoise(noise, fontsAll)
@@ -124,17 +124,17 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 		}
 	}
 
-	//画 细直线 (n 条)
+	// 画 细直线 (n 条)
 	if d.ShowLineOptions&OptionShowSlimeLine == OptionShowSlimeLine {
 		itemChar.drawSlimLine(3)
 	}
 
-	//画 多个小波浪线
+	// 画 多个小波浪线
 	if d.ShowLineOptions&OptionShowSineLine == OptionShowSineLine {
 		itemChar.drawSineLine()
 	}
 
-	//draw question
+	// draw question
 	err = itemChar.drawText(question, d.fontsArray)
 	if err != nil {
 		return

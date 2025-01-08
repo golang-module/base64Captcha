@@ -15,6 +15,6 @@ type Store interface {
 	// whether the captcha must be deleted from the store.
 	Get(id string, clear bool) string
 
-	//Verify captcha's answer directly
+	// Verify captcha's answer directly
 	Verify(id, answer string, clear bool) bool
 }

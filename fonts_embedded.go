@@ -17,7 +17,7 @@ func (s *EmbeddedFontsStorage) LoadFontByName(name string) *truetype.Font {
 		panic(err)
 	}
 
-	//font file bytes to trueTypeFont
+	// font file bytes to trueTypeFont
 	trueTypeFont, err := freetype.ParseFont(fontBytes)
 	if err != nil {
 		panic(err)

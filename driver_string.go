@@ -15,25 +15,25 @@ type DriverString struct {
 	// Width Captcha png width in pixel.
 	Width int
 
-	//NoiseCount text noise count.
+	// NoiseCount text noise count.
 	NoiseCount int
 
-	//ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
+	// ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
 	ShowLineOptions int
 
-	//Length random string length.
+	// Length random string length.
 	Length int
 
-	//Source is a unicode which is the rand string from.
+	// Source is a Unicode which is the rand string from.
 	Source string
 
-	//BgColor captcha image background color (optional)
+	// BgColor captcha image background color (optional)
 	BgColor *color.RGBA
 
-	//fontsStorage font storage (optional)
+	// fontsStorage font storage (optional)
 	fontsStorage FontsStorage
 
-	//Fonts loads by name see fonts.go's comment
+	// Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
 }
@@ -95,22 +95,22 @@ func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
-	//draw hollow line
+	// draw hollow line
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
 		itemChar.drawHollowLine()
 	}
 
-	//draw slime line
+	// draw slime line
 	if d.ShowLineOptions&OptionShowSlimeLine == OptionShowSlimeLine {
 		itemChar.drawSlimLine(3)
 	}
 
-	//draw sine line
+	// draw sine line
 	if d.ShowLineOptions&OptionShowSineLine == OptionShowSineLine {
 		itemChar.drawSineLine()
 	}
 
-	//draw noise
+	// draw noise
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
 		noise := RandText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
@@ -120,7 +120,7 @@ func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 		}
 	}
 
-	//draw content
+	// draw content
 	err = itemChar.drawText(content, d.fontsArray)
 	if err != nil {
 		return
