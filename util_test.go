@@ -9,8 +9,8 @@ import (
 
 func Test_parseDigitsToString(t *testing.T) {
 	for i := 1; i < 10; i++ {
-		digti := randomDigits(i)
-		s := parseDigitsToString(digti)
+		digit := randomDigits(i)
+		s := parseDigitsToString(digit)
 		if len(s) != i {
 			t.Error("failed")
 		}
@@ -21,13 +21,13 @@ func Test_parseDigitsToString(t *testing.T) {
 
 func Test_stringToFakeByte(t *testing.T) {
 	for i := 1; i < 10; i++ {
-		digti := randomDigits(i)
-		s := parseDigitsToString(digti)
+		digit := randomDigits(i)
+		s := parseDigitsToString(digit)
 		if len(s) != i {
 			t.Error("failed")
 		}
 		fb := stringToFakeByte(s)
-		if !reflect.DeepEqual(fb, digti) {
+		if !reflect.DeepEqual(fb, digit) {
 			t.Error("failed")
 		}
 	}
@@ -35,8 +35,8 @@ func Test_stringToFakeByte(t *testing.T) {
 
 func Test_randomDigits(t *testing.T) {
 	for i := 1; i < 10; i++ {
-		digti := randomDigits(i)
-		if len(digti) != i {
+		digit := randomDigits(i)
+		if len(digit) != i {
 			t.Error("failed")
 		}
 
@@ -45,8 +45,8 @@ func Test_randomDigits(t *testing.T) {
 
 func Test_randomBytes(t *testing.T) {
 	for i := 1; i < 10; i++ {
-		digti := randomBytes(i)
-		if len(digti) != i {
+		digit := randomBytes(i)
+		if len(digit) != i {
 			t.Error("failed")
 		}
 	}
@@ -54,15 +54,15 @@ func Test_randomBytes(t *testing.T) {
 
 func Test_randomBytesMod(t *testing.T) {
 	for i := 1; i < 10; i++ {
-		digti := randomBytesMod(i, 'c')
-		if len(digti) != i {
+		digit := randomBytesMod(i, 'c')
+		if len(digit) != i {
 			t.Error("failed")
 		}
 	}
 }
 
 func Test_itemWriteFile(t *testing.T) {
-	//todo:::
+	// todo:::
 }
 
 func Test_pathExists(t *testing.T) {
