@@ -4,13 +4,13 @@ import (
 	"reflect"
 	"testing"
 
-	captchaSotre "github.com/golang-module/base64Captcha/store"
+	"github.com/golang-module/base64Captcha/store"
 )
 
 func TestCaptcha_GenerateB64s(t *testing.T) {
 	type fields struct {
 		Driver Driver
-		Store  Store
+		Store  store.Store
 	}
 
 	dDigit := DriverDigit{80, 240, 5, 0.7, 5}
@@ -22,8 +22,8 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 		wantB64s string
 		wantErr  bool
 	}{
-		{"mem-digit", fields{&dDigit, captchaSotre.DefaultMemStore}, "xxxx", "", false},
-		{"mem-audio", fields{audioDriver, captchaSotre.DefaultMemStore}, "xxxx", "", false},
+		{"mem-digit", fields{&dDigit, store.DefaultMemoryStore}, "xxxx", "", false},
+		{"mem-audio", fields{audioDriver, store.DefaultMemoryStore}, "xxxx", "", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -46,7 +46,7 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 func TestCaptcha_Verify(t *testing.T) {
 	type fields struct {
 		Driver Driver
-		Store  Store
+		Store  store.Store
 	}
 	type args struct {
 		id     string
@@ -77,7 +77,7 @@ func TestCaptcha_Verify(t *testing.T) {
 func TestNewCaptcha(t *testing.T) {
 	type args struct {
 		driver Driver
-		store  Store
+		store  store.Store
 	}
 	tests := []struct {
 		name string

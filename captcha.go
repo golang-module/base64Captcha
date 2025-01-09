@@ -7,7 +7,7 @@ package base64Captcha
 import (
 	"strings"
 
-	captchaSotre "github.com/golang-module/base64Captcha/store"
+	"github.com/golang-module/base64Captcha/store"
 )
 
 // Version current version
@@ -16,21 +16,21 @@ const Version = "1.3.8"
 // Captcha basic information.
 type Captcha struct {
 	Driver Driver
-	Store  Store
+	Store  store.Store
 }
 
 // NewCaptcha creates a captcha instance from driver and store
-func NewCaptcha(driver Driver, store ...Store) *Captcha {
-	if len(store) == 0 {
-		store = make([]Store, 1)
-		store[0] = captchaSotre.DefaultMemStore
+func NewCaptcha(d Driver, s ...store.Store) *Captcha {
+	if len(s) == 0 {
+		s = make([]store.Store, 1)
+		s[0] = store.DefaultMemoryStore
 	}
-	return &Captcha{Driver: driver, Store: store[0]}
+	return &Captcha{Driver: d, Store: s[0]}
 }
 
 // SetStore sets captcha store
-func (c *Captcha) SetStore(store Store) *Captcha {
-	c.Store = store
+func (c *Captcha) SetStore(s store.Store) *Captcha {
+	c.Store = s
 	return c
 }
 
