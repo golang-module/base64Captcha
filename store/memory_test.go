@@ -1,4 +1,4 @@
-package base64Captcha
+package store
 
 import (
 	"fmt"
@@ -88,26 +88,6 @@ func TestNewMemoryStore(t *testing.T) {
 			if got := NewMemoryStore(tt.args.collectNum, tt.args.expiration); got == nil {
 				t.Errorf("NewMemoryStore() = %v, want %v", got, tt.want)
 			}
-		})
-	}
-}
-
-func Test_memoryStore_Set(t *testing.T) {
-	thisStore := NewMemoryStore(10, time.Hour)
-	type args struct {
-		id    string
-		value string
-	}
-	tests := []struct {
-		name string
-		s    Store
-		args args
-	}{
-		{"", thisStore, args{RandomId(), RandomId()}},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			_ = tt.s.Set(tt.args.id, tt.args.value)
 		})
 	}
 }

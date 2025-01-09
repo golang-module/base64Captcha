@@ -1,4 +1,4 @@
-package base64Captcha
+package store
 
 import (
 	"reflect"
@@ -7,23 +7,23 @@ import (
 	"time"
 )
 
-var syncStore = NewStoreSyncMap(liveTime)
-var liveTime = time.Second * 2
+var duration = time.Second * 2
+var mapStore = NewMapStore(duration)
 
 func TestNewStoreSyncMap(t *testing.T) {
 	type args struct {
-		liveTime time.Duration
+		duration time.Duration
 	}
 	tests := []struct {
 		name string
 		args args
-		want *StoreSyncMap
+		want *MapStore
 	}{
-		{"new", args{liveTime}, syncStore},
+		{"new", args{duration}, mapStore},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewStoreSyncMap(tt.args.liveTime); !reflect.DeepEqual(got, tt.want) {
+			if got := NewMapStore(tt.args.duration); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewStoreSyncMap() = %v, want %v", got, tt.want)
 			}
 		})
@@ -31,12 +31,12 @@ func TestNewStoreSyncMap(t *testing.T) {
 }
 
 func TestStoreSyncMap_Get(t *testing.T) {
-	syncStore.Set("1", "1")
-	syncStore.Set("2", "2")
+	mapStore.Set("1", "1")
+	mapStore.Set("2", "2")
 
 	type fields struct {
-		liveTime time.Duration
-		m        *sync.Map
+		d time.Duration
+		m *sync.Map
 	}
 	type args struct {
 		id    string
@@ -48,15 +48,15 @@ func TestStoreSyncMap_Get(t *testing.T) {
 		args   args
 		want   string
 	}{
-		{"get", fields{liveTime, syncStore.m}, args{"1", false}, "1"},
-		{"get", fields{liveTime, syncStore.m}, args{"2", true}, "2"},
-		{"get", fields{liveTime, syncStore.m}, args{"2", true}, ""},
+		{"get", fields{duration, mapStore.m}, args{"1", false}, "1"},
+		{"get", fields{duration, mapStore.m}, args{"2", true}, "2"},
+		{"get", fields{duration, mapStore.m}, args{"2", true}, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := StoreSyncMap{
-				liveTime: tt.fields.liveTime,
-				m:        tt.fields.m,
+			s := MapStore{
+				d: tt.fields.d,
+				m: tt.fields.m,
 			}
 			if got := s.Get(tt.args.id, tt.args.clear); got != tt.want {
 				t.Errorf("Get() = %v, want %v", got, tt.want)
@@ -65,20 +65,20 @@ func TestStoreSyncMap_Get(t *testing.T) {
 	}
 }
 func TestStoreSyncMap_Expire(t *testing.T) {
-	syncStore.Set("2", "22")
-	if v := syncStore.Get("2", false); v != "22" {
+	mapStore.Set("2", "22")
+	if v := mapStore.Get("2", false); v != "22" {
 		t.Error("failed")
 	}
 	time.Sleep(time.Second * 2)
-	if v := syncStore.Get("2", false); v != "" {
+	if v := mapStore.Get("2", false); v != "" {
 		t.Error("expire failed")
 	}
 }
 
 func TestStoreSyncMap_Set(t *testing.T) {
 	type fields struct {
-		liveTime time.Duration
-		m        *sync.Map
+		d time.Duration
+		m *sync.Map
 	}
 	type args struct {
 		id    string
@@ -89,13 +89,13 @@ func TestStoreSyncMap_Set(t *testing.T) {
 		fields fields
 		args   args
 	}{
-		{"get", fields{liveTime, syncStore.m}, args{"1", "1"}},
+		{"get", fields{duration, mapStore.m}, args{"1", "1"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := StoreSyncMap{
-				liveTime: tt.fields.liveTime,
-				m:        tt.fields.m,
+			s := MapStore{
+				d: tt.fields.d,
+				m: tt.fields.m,
 			}
 			s.Set(tt.args.id, tt.args.value)
 		})
@@ -103,11 +103,11 @@ func TestStoreSyncMap_Set(t *testing.T) {
 }
 
 func TestStoreSyncMap_Verify(t *testing.T) {
-	syncStore.Set("1", "1")
-	syncStore.Set("2", "2")
+	mapStore.Set("1", "1")
+	mapStore.Set("2", "2")
 	type fields struct {
-		liveTime time.Duration
-		m        *sync.Map
+		d time.Duration
+		m *sync.Map
 	}
 	type args struct {
 		id     string
@@ -120,16 +120,16 @@ func TestStoreSyncMap_Verify(t *testing.T) {
 		args   args
 		want   bool
 	}{
-		{"get", fields{liveTime, syncStore.m}, args{"1", "1", true}, true},
-		{"get", fields{liveTime, syncStore.m}, args{"1", "1", false}, false},
-		{"get", fields{liveTime, syncStore.m}, args{"2", "2", true}, true},
-		{"get", fields{liveTime, syncStore.m}, args{"2", "2", false}, false},
+		{"get", fields{duration, mapStore.m}, args{"1", "1", true}, true},
+		{"get", fields{duration, mapStore.m}, args{"1", "1", false}, false},
+		{"get", fields{duration, mapStore.m}, args{"2", "2", true}, true},
+		{"get", fields{duration, mapStore.m}, args{"2", "2", false}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := StoreSyncMap{
-				liveTime: tt.fields.liveTime,
-				m:        tt.fields.m,
+			s := MapStore{
+				d: tt.fields.d,
+				m: tt.fields.m,
 			}
 			if got := s.Verify(tt.args.id, tt.args.answer, tt.args.clear); got != tt.want {
 				t.Errorf("Verify() = %v, want %v", got, tt.want)
@@ -140,20 +140,20 @@ func TestStoreSyncMap_Verify(t *testing.T) {
 
 func TestStoreSyncMap_delete(t *testing.T) {
 	type fields struct {
-		liveTime time.Duration
-		m        *sync.Map
+		d time.Duration
+		m *sync.Map
 	}
 	tests := []struct {
 		name   string
 		fields fields
 	}{
-		{"get", fields{liveTime, new(sync.Map)}},
+		{"get", fields{duration, new(sync.Map)}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := StoreSyncMap{
-				liveTime: tt.fields.liveTime,
-				m:        tt.fields.m,
+			s := MapStore{
+				d: tt.fields.d,
+				m: tt.fields.m,
 			}
 			s.delete()
 		})

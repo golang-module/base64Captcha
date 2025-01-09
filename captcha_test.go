@@ -3,6 +3,8 @@ package base64Captcha
 import (
 	"reflect"
 	"testing"
+
+	captchaSotre "github.com/golang-module/base64Captcha/store"
 )
 
 func TestCaptcha_GenerateB64s(t *testing.T) {
@@ -20,8 +22,8 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 		wantB64s string
 		wantErr  bool
 	}{
-		{"mem-digit", fields{&dDigit, DefaultMemStore}, "xxxx", "", false},
-		{"mem-audio", fields{audioDriver, DefaultMemStore}, "xxxx", "", false},
+		{"mem-digit", fields{&dDigit, captchaSotre.DefaultMemStore}, "xxxx", "", false},
+		{"mem-audio", fields{audioDriver, captchaSotre.DefaultMemStore}, "xxxx", "", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

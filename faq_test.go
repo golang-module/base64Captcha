@@ -1,9 +1,13 @@
 package base64Captcha
 
-import "testing"
+import (
+	"testing"
+
+	captchaSotre "github.com/golang-module/base64Captcha/store"
+)
 
 func TestHandlerCaptchaGenerate(t *testing.T) {
-	store := DefaultMemStore
+	store := captchaSotre.DefaultMemStore
 
 	driver := &DriverString{
 		Height:          80,

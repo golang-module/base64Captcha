@@ -4,7 +4,11 @@
 // base64Captcha is used for fast development of restfull APIs, web apps and backend services in Go. give a string identifier to the package, and it returns with a base64-encoding-png-string
 package base64Captcha
 
-import "strings"
+import (
+	"strings"
+
+	captchaSotre "github.com/golang-module/base64Captcha/store"
+)
 
 // Version current version
 const Version = "1.3.8"
@@ -19,7 +23,7 @@ type Captcha struct {
 func NewCaptcha(driver Driver, store ...Store) *Captcha {
 	if len(store) == 0 {
 		store = make([]Store, 1)
-		store[0] = DefaultMemStore
+		store[0] = captchaSotre.DefaultMemStore
 	}
 	return &Captcha{Driver: driver, Store: store[0]}
 }

@@ -1,4 +1,4 @@
-package base64Captcha
+package store
 
 import (
 	"container/list"
@@ -6,21 +6,18 @@ import (
 	"time"
 )
 
-// expValue stores timestamp and id of captchas. It is used in the list inside
-// memoryStore for indexing generated captchas by timestamp to enable garbage
-// collection of expired captchas.
-type idByTimeValue struct {
-	timestamp time.Time
-	id        string
+type memory struct {
+	time time.Time
+	id   string
 }
 
 // memoryStore is an internal store for captcha ids and their values.
 type memoryStore struct {
 	sync.RWMutex
-	digitsById map[string]string
-	idByTime   *list.List
+	idMap  map[string]string
+	idList *list.List
 	// Number of items stored since last collection.
-	numStored int
+	storedNum int
 	// Number of saved items that triggers collection.
 	collectNum int
 	// Expiration time of captchas.
@@ -32,8 +29,8 @@ type memoryStore struct {
 // store must be registered with SetCustomStore to replace the default one.
 func NewMemoryStore(collectNum int, expiration time.Duration) Store {
 	s := new(memoryStore)
-	s.digitsById = make(map[string]string)
-	s.idByTime = list.New()
+	s.idMap = make(map[string]string)
+	s.idList = list.New()
 	s.collectNum = collectNum
 	s.expiration = expiration
 	return s
@@ -41,11 +38,11 @@ func NewMemoryStore(collectNum int, expiration time.Duration) Store {
 
 func (s *memoryStore) Set(id string, value string) error {
 	s.Lock()
-	s.digitsById[id] = value
-	s.idByTime.PushBack(idByTimeValue{time.Now(), id})
-	s.numStored++
+	s.idMap[id] = value
+	s.idList.PushBack(memory{time.Now(), id})
+	s.storedNum++
 	s.Unlock()
-	if s.numStored > s.collectNum {
+	if s.storedNum > s.collectNum {
 		go s.collect()
 	}
 	return nil
@@ -59,7 +56,7 @@ func (s *memoryStore) Verify(id, answer string, clear bool) bool {
 	return v != "" && v == answer
 }
 
-func (s *memoryStore) Get(id string, clear bool) (value string) {
+func (s *memoryStore) Get(id string, clear bool) string {
 	if !clear {
 		// When we don't need to clear captcha, acquire read lock.
 		s.RLock()
@@ -68,36 +65,34 @@ func (s *memoryStore) Get(id string, clear bool) (value string) {
 		s.Lock()
 		defer s.Unlock()
 	}
-	value, ok := s.digitsById[id]
+	value, ok := s.idMap[id]
 	if !ok {
-		return
+		return ""
 	}
 	if clear {
-		delete(s.digitsById, id)
+		delete(s.idMap, id)
 	}
-	return
+	return value
 }
 
 func (s *memoryStore) collect() {
 	now := time.Now()
 	s.Lock()
 	defer s.Unlock()
-	for e := s.idByTime.Front(); e != nil; {
-		e = s.collectOne(e, now)
+	for ele := s.idList.Front(); ele != nil; {
+		mv, ok := ele.Value.(memory)
+		if !ok {
+			ele = nil
+			continue
+		}
+		if mv.time.Add(s.expiration).Before(now) {
+			delete(s.idMap, mv.id)
+			next := ele.Next()
+			s.idList.Remove(ele)
+			s.storedNum--
+			ele = next
+		} else {
+			ele = ele.Next()
+		}
 	}
-}
-
-func (s *memoryStore) collectOne(e *list.Element, specifyTime time.Time) *list.Element {
-	ev, ok := e.Value.(idByTimeValue)
-	if !ok {
-		return nil
-	}
-	if ev.timestamp.Add(s.expiration).Before(specifyTime) {
-		delete(s.digitsById, ev.id)
-		next := e.Next()
-		s.idByTime.Remove(e)
-		s.numStored--
-		return next
-	}
-	return nil
 }
