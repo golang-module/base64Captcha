@@ -18,24 +18,27 @@ func NewSource(fs embed.FS) *Source {
 	return &Source{fs: fs}
 }
 
-// LoadFont import font from file.
+// LoadFont load font from file.
 func (s *Source) LoadFont(name string) *truetype.Font {
-	fontPath := strings.TrimLeft(FontPath, "/")
+	fontPath := strings.Trim(FontPath, "/")
 	fontBytes, err := s.fs.ReadFile(fontPath + "/" + name)
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
 	// font file bytes to trueTypeFont
 	trueTypeFont, err := freetype.ParseFont(fontBytes)
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
 	return trueTypeFont
 }
 
-// LoadFonts import fonts from dir.
+// LoadFonts load fonts from dir.
 // make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
 func (s *Source) LoadFonts(names []string) []*truetype.Font {
+	if len(names) == 0 {
+		return nil
+	}
 	fonts := make([]*truetype.Font, 0)
 	for _, name := range names {
 		f := s.LoadFont(name)
@@ -44,7 +47,7 @@ func (s *Source) LoadFonts(names []string) []*truetype.Font {
 	return fonts
 }
 
-// LoadAll import all fonts.
+// LoadAll load all fonts.
 func (s *Source) LoadAll() []*truetype.Font {
 	return s.LoadFonts([]string{
 		"3Dumb.ttf",
@@ -60,7 +63,7 @@ func (s *Source) LoadAll() []*truetype.Font {
 	})
 }
 
-// LoadChinese import Chinese font.
+// LoadChinese load Chinese font.
 func (s *Source) LoadChinese() *truetype.Font {
 	return s.LoadFont("wqy-microhei.ttc")
 }
