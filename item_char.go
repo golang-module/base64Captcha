@@ -78,13 +78,14 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 	var py float64
 
 	// 振幅
-	a := randIntn(item.height / 2)
+	h := randIntn(item.height / 2)
 
-	// Y轴方向偏移量
-	b := random(int64(-item.height/4), int64(item.height/4))
+	// X 轴方向偏移量
+	x := random(int64(-item.height/4), int64(item.height/4))
 
-	// X轴方向偏移量
-	f := random(int64(-item.height/4), int64(item.height/4))
+	// Y 轴方向偏移量
+	y := random(int64(-item.height/4), int64(item.height/4))
+
 	// 周期
 	var t float64
 	if item.height > item.width/2 {
@@ -104,11 +105,10 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 
 	for px := px1; px < px2; px++ {
 		if w != 0 {
-			py = float64(a)*math.Sin(w*float64(px)+f) + b + (float64(item.width) / float64(5))
+			py = float64(h)*math.Sin(w*float64(px)+x) + y + (float64(item.width) / float64(5))
 			i := item.height / 5
 			for i > 0 {
 				item.nrgba.Set(px+i, int(py), c)
-				// fmt.Println(px + i,int(py) )
 				i--
 			}
 		}
@@ -146,7 +146,6 @@ func (item *ItemChar) drawSlimLine(num int) *ItemChar {
 
 func (item *ItemChar) drawBeeline(point1 point, point2 point, lineColor color.RGBA) {
 	dx := math.Abs(float64(point1.X - point2.X))
-
 	dy := math.Abs(float64(point2.Y - point1.Y))
 	sx, sy := 1, 1
 	if point1.X >= point2.X {
@@ -178,7 +177,6 @@ func (item *ItemChar) drawBeeline(point1 point, point2 point, lineColor color.RG
 }
 
 func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error {
-
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
@@ -202,7 +200,7 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 	return nil
 }
 
-// drawText draw captcha string to image.把文字写入图像验证码
+// drawText draw captcha string to image.
 
 func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 	c := freetype.NewContext()

@@ -13,7 +13,6 @@ type ItemAudio struct {
 	answer      string
 	body        *bytes.Buffer
 	digitSounds [][]byte
-	// rng         siprng
 }
 
 // newAudio returns a new audio captcha with the given digits, where each digit
@@ -46,8 +45,8 @@ func newAudio(digits []byte, lang string) *ItemAudio {
 	bg := a.makeBackgroundSound(a.longestDigitSndLen()*len(digits) + intdur)
 	// Create buffer and write audio to it.
 	sil := makeSilence(sampleRate / 5)
-	bufcap := 3*len(beepSound) + 2*len(sil) + len(bg) + len(endingBeepSound)
-	a.body = bytes.NewBuffer(make([]byte, 0, bufcap))
+	bufCap := 3*len(beepSound) + 2*len(sil) + len(bg) + len(endingBeepSound)
+	a.body = bytes.NewBuffer(make([]byte, 0, bufCap))
 	// Write prelude, three beeps.
 	a.body.Write(beepSound)
 	a.body.Write(sil)
@@ -157,8 +156,7 @@ func (a *ItemAudio) WriteTo(w io.Writer) (n int64, err error) {
 func (a *ItemAudio) EncodeB64string() string {
 	var buf bytes.Buffer
 	if _, err := a.WriteTo(&buf); err != nil {
-		panic(err)
+		panic(err.Error())
 	}
 	return fmt.Sprintf("data:%s;base64,%s", MimeTypeAudio, base64.StdEncoding.EncodeToString(buf.Bytes()))
-
 }
