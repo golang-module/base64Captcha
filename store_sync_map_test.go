@@ -138,7 +138,7 @@ func TestStoreSyncMap_Verify(t *testing.T) {
 	}
 }
 
-func TestStoreSyncMap_rmExpire(t *testing.T) {
+func TestStoreSyncMap_delete(t *testing.T) {
 	type fields struct {
 		liveTime time.Duration
 		m        *sync.Map
@@ -155,7 +155,7 @@ func TestStoreSyncMap_rmExpire(t *testing.T) {
 				liveTime: tt.fields.liveTime,
 				m:        tt.fields.m,
 			}
-			s.rmExpire()
+			s.delete()
 		})
 	}
 }

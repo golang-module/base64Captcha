@@ -17,21 +17,21 @@ func NewStoreSyncMap(liveTime time.Duration) *StoreSyncMap {
 }
 
 // smv a value type
-type smv struct {
-	t     time.Time
+type syncMap struct {
+	time  time.Time
 	Value string
 }
 
-// newSmv create a instance
-func newSmv(v string) *smv {
-	return &smv{t: time.Now(), Value: v}
+// newSyncMap create a sync map instance
+func newSyncMap(v string) *syncMap {
+	return &syncMap{time: time.Now(), Value: v}
 }
 
-// rmExpire remove expired items
-func (s StoreSyncMap) rmExpire() {
+// delete remove expired items
+func (s StoreSyncMap) delete() {
 	expireTime := time.Now().Add(-s.liveTime)
 	s.m.Range(func(key, value interface{}) bool {
-		if sv, ok := value.(*smv); ok && sv.t.Before(expireTime) {
+		if sv, ok := value.(*syncMap); ok && sv.time.Before(expireTime) {
 			s.m.Delete(key)
 		}
 		return true
@@ -39,9 +39,10 @@ func (s StoreSyncMap) rmExpire() {
 }
 
 // Set a string value
-func (s StoreSyncMap) Set(id string, value string) {
-	s.rmExpire()
-	s.m.Store(id, newSmv(value))
+func (s StoreSyncMap) Set(id string, value string) error {
+	s.delete()
+	s.m.Store(id, newSyncMap(value))
+	return nil
 }
 
 // Get a string value
@@ -51,7 +52,7 @@ func (s StoreSyncMap) Get(id string, clear bool) string {
 		return ""
 	}
 	s.m.Delete(id)
-	if sv, ok := v.(*smv); ok {
+	if sv, ok := v.(*syncMap); ok {
 		return sv.Value
 	}
 	return ""
