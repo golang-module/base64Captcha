@@ -24,6 +24,12 @@ func NewCaptcha(driver Driver, store ...Store) *Captcha {
 	return &Captcha{Driver: driver, Store: store[0]}
 }
 
+// SetStore sets captcha store
+func (c *Captcha) SetStore(store Store) *Captcha {
+	c.Store = store
+	return c
+}
+
 // Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, src, answer string, err error) {
 	id, content, answer := c.Driver.GenerateIdQuestionAnswer()

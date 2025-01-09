@@ -3,7 +3,7 @@ package base64Captcha
 import "testing"
 
 func TestHandlerCaptchaGenerate(t *testing.T) {
-	s := DefaultMemStore
+	store := DefaultMemStore
 
 	driver := &DriverString{
 		Height:          80,
@@ -16,7 +16,7 @@ func TestHandlerCaptchaGenerate(t *testing.T) {
 		Fonts:           nil,
 	}
 
-	c := NewCaptcha(driver, s)
+	c := NewCaptcha(driver, store)
 
 	id, _, _, err := c.Generate()
 	if err != nil {
