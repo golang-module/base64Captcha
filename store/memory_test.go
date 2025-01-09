@@ -109,7 +109,7 @@ func Test_memoryStore_Verify(t *testing.T) {
 	if got {
 		t.Error("failed3")
 	}
-	got = DefaultMemStore.Verify("saaf", "", true)
+	got = DefaultMemoryStore.Verify("saaf", "", true)
 	if got {
 		t.Error("CVE-2023-45292 GO-2023-2386")
 	}

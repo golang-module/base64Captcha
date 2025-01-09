@@ -27,10 +27,21 @@ import "github.com/golang-module/base64Captcha
 
 #### 用法示例
 
+```go
+storer import "github.com/golang-module/base64Captcha/store
+
+// 使用内存存储
+store = storer.DefaultMemoryStore
+// 或者使用 sync map 存储
+store = storer.DefaultSyncMapStore
+```
+
 ##### 生成纯数字验证码
 ```go
 driver = base64Captcha.NewDriverDigit(80, 240, 4, 0.8, 80)
-captcha := base64Captcha.NewCaptcha(driver)
+captcha := base64Captcha.NewCaptcha(driver, storer)
+// 或者使用 SetSore 方法
+captcha := base64Captcha.NewCaptcha(driver).SetSore(storer)
 
 // 生成验证码
 id, src, answer, err = captcha.Generate()

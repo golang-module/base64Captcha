@@ -8,7 +8,7 @@ import (
 )
 
 var duration = time.Second * 2
-var mapStore = NewMapStore(duration)
+var mapStore = NewSyncMapStore(duration)
 
 func TestNewStoreSyncMap(t *testing.T) {
 	type args struct {
@@ -17,13 +17,13 @@ func TestNewStoreSyncMap(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want *MapStore
+		want *syncMapStore
 	}{
 		{"new", args{duration}, mapStore},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewMapStore(tt.args.duration); !reflect.DeepEqual(got, tt.want) {
+			if got := NewSyncMapStore(tt.args.duration); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewStoreSyncMap() = %v, want %v", got, tt.want)
 			}
 		})
@@ -54,7 +54,7 @@ func TestStoreSyncMap_Get(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := MapStore{
+			s := syncMapStore{
 				d: tt.fields.d,
 				m: tt.fields.m,
 			}
@@ -93,7 +93,7 @@ func TestStoreSyncMap_Set(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := MapStore{
+			s := syncMapStore{
 				d: tt.fields.d,
 				m: tt.fields.m,
 			}
@@ -127,7 +127,7 @@ func TestStoreSyncMap_Verify(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := MapStore{
+			s := syncMapStore{
 				d: tt.fields.d,
 				m: tt.fields.m,
 			}
@@ -151,7 +151,7 @@ func TestStoreSyncMap_delete(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := MapStore{
+			s := syncMapStore{
 				d: tt.fields.d,
 				m: tt.fields.m,
 			}

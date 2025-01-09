@@ -5,9 +5,9 @@ import (
 	"time"
 )
 
-// NewMapStore new a instance
-func NewMapStore(duration time.Duration) *MapStore {
-	return &MapStore{d: duration, m: new(sync.Map)}
+// NewSyncMapStore new a instance
+func NewSyncMapStore(duration time.Duration) *syncMapStore {
+	return &syncMapStore{d: duration, m: new(sync.Map)}
 }
 
 type syncMap struct {
@@ -15,21 +15,21 @@ type syncMap struct {
 	Value string
 }
 
-// MapStore use sync.Map as store
-type MapStore struct {
+// syncMapStore use sync.Map as store
+type syncMapStore struct {
 	d time.Duration
 	m *sync.Map
 }
 
 // Set a string value
-func (s MapStore) Set(id string, value string) error {
+func (s syncMapStore) Set(id string, value string) error {
 	s.delete()
 	s.m.Store(id, &syncMap{time: time.Now(), Value: value})
 	return nil
 }
 
 // Get a string value
-func (s MapStore) Get(id string, clear bool) string {
+func (s syncMapStore) Get(id string, clear bool) string {
 	v, ok := s.m.Load(id)
 	if !ok {
 		return ""
@@ -42,12 +42,12 @@ func (s MapStore) Get(id string, clear bool) string {
 }
 
 // Verify check a string value
-func (s MapStore) Verify(id, answer string, clear bool) bool {
+func (s syncMapStore) Verify(id, answer string, clear bool) bool {
 	return s.Get(id, clear) == answer
 }
 
 // delete remove expired items
-func (s MapStore) delete() {
+func (s syncMapStore) delete() {
 	expireTime := time.Now().Add(-s.d)
 	s.m.Range(func(key, value interface{}) bool {
 		if sv, ok := value.(*syncMap); ok && sv.time.Before(expireTime) {
