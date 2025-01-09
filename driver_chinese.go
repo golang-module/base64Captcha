@@ -4,7 +4,7 @@ import (
 	"image/color"
 	"strings"
 
-	fontLoader "github.com/golang-module/base64Captcha/fonts"
+	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -37,7 +37,7 @@ type DriverChinese struct {
 
 // NewDriverChinese creates a driver of Chinese characters
 func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverChinese {
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 	fontsArray := defaultSource.LoadFonts(fonts)
 	if len(fontsArray) == 0 {
 		fontsArray = defaultSource.LoadAll()
@@ -47,7 +47,7 @@ func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int
 
 // ConvertFonts loads fonts by names
 func (d *DriverChinese) ConvertFonts() *DriverChinese {
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 	fontsArray := defaultSource.LoadFonts(d.Fonts)
 	if len(fontsArray) == 0 {
 		fontsArray = defaultSource.LoadAll()
@@ -59,7 +59,6 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 // GenerateIdQuestionAnswer generates captcha content and its answer
 func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) {
 	id = RandomId()
-
 	ss := strings.Split(d.Source, ",")
 	length := len(ss)
 	if length == 1 {

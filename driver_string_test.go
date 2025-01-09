@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	fontLoader "github.com/golang-module/base64Captcha/fonts"
+	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -24,7 +24,7 @@ func TestDriverString_DrawCaptcha(t *testing.T) {
 		content string
 	}
 
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 	fontsAll := defaultSource.LoadAll()
 	tests := []struct {
 		name     string

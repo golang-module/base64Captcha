@@ -4,7 +4,7 @@ import (
 	"image/color"
 	"strings"
 
-	fontLoader "github.com/golang-module/base64Captcha/fonts"
+	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -38,7 +38,7 @@ type DriverString struct {
 
 // NewDriverString creates driver
 func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverString {
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 	fontsArray := defaultSource.LoadFonts(fonts)
 	if len(fontsArray) == 0 {
 		fontsArray = defaultSource.LoadAll()
@@ -48,7 +48,7 @@ func NewDriverString(height int, width int, noiseCount int, showLineOptions int,
 
 // ConvertFonts loads fonts by names
 func (d *DriverString) ConvertFonts() *DriverString {
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 	fontsArray := defaultSource.LoadFonts(d.Fonts)
 	if len(fontsArray) == 0 {
 		fontsArray = defaultSource.LoadAll()

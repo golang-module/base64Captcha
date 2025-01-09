@@ -5,12 +5,12 @@ import (
 	"reflect"
 	"testing"
 
-	fontLoader "github.com/golang-module/base64Captcha/fonts"
+	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
 
 func TestDriverLanguage_DrawCaptcha(t *testing.T) {
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 	fontChinese := defaultSource.LoadChinese()
 	ds := NewDriverLanguage(80, 240, 5, OptionShowSineLine|OptionShowSlimeLine|OptionShowHollowLine, 5, nil, []*truetype.Font{fontChinese}, "emotion")
 

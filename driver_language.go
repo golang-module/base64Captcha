@@ -4,7 +4,7 @@ import (
 	"image/color"
 	"log"
 
-	fontLoader "github.com/golang-module/base64Captcha/fonts"
+	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -100,7 +100,7 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 		itemChar.drawSineLine()
 	}
 
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 
 	// draw noise
 	if d.NoiseCount > 0 {

@@ -13,10 +13,10 @@ import (
 	"log"
 	"math"
 
-	fontLoader "github.com/golang-module/base64Captcha/fonts"
+	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
+	imageFont "golang.org/x/image/font"
 )
 
 // ItemChar captcha item of unicode characters
@@ -184,7 +184,7 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 
 	c.SetClip(item.nrgba.Bounds())
 	c.SetDst(item.nrgba)
-	c.SetHinting(font.HintingFull)
+	c.SetHinting(imageFont.HintingFull)
 	rawFontSize := float64(item.height) / (1 + float64(randIntn(7))/float64(10))
 
 	for _, char := range noiseText {
@@ -209,7 +209,7 @@ func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 	c.SetDPI(imageStringDpi)
 	c.SetClip(item.nrgba.Bounds())
 	c.SetDst(item.nrgba)
-	c.SetHinting(font.HintingFull)
+	c.SetHinting(imageFont.HintingFull)
 
 	if len(text) == 0 {
 		return errors.New("text must not be empty, there is nothing to draw")
@@ -263,7 +263,7 @@ func randFontFrom(fonts []*truetype.Font) *truetype.Font {
 
 	if fontCount == 0 {
 		// loading default fonts
-		fonts = fontLoader.DefaultSource.LoadAll()
+		fonts = font.DefaultSource.LoadAll()
 		fontCount = len(fonts)
 	}
 	index := randIntn(fontCount)

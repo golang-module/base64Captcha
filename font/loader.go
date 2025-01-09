@@ -1,4 +1,4 @@
-package fonts
+package font
 
 import (
 	"embed"
@@ -8,7 +8,7 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-const FontsPath = "sources"
+const FontPath = "sources"
 
 type Source struct {
 	fs embed.FS
@@ -20,8 +20,8 @@ func NewSource(fs embed.FS) *Source {
 
 // LoadFont import font from file.
 func (s *Source) LoadFont(name string) *truetype.Font {
-	fontsPath := strings.TrimLeft(FontsPath, "/")
-	fontBytes, err := s.fs.ReadFile(fontsPath + "/" + name)
+	fontPath := strings.TrimLeft(FontPath, "/")
+	fontBytes, err := s.fs.ReadFile(fontPath + "/" + name)
 	if err != nil {
 		panic(err)
 	}

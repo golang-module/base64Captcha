@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"strings"
 
-	fontLoader "github.com/golang-module/base64Captcha/fonts"
+	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -34,7 +34,7 @@ type DriverMath struct {
 
 // NewDriverMath creates a driver of math
 func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, bgColor *color.RGBA, fonts []string) *DriverMath {
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 	fontsArray := defaultSource.LoadFonts(fonts)
 	if len(fontsArray) == 0 {
 		fontsArray = defaultSource.LoadAll()
@@ -44,7 +44,7 @@ func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, b
 
 // ConvertFonts loads fonts from names
 func (d *DriverMath) ConvertFonts() *DriverMath {
-	defaultSource := fontLoader.DefaultSource
+	defaultSource := font.DefaultSource
 	fontsArray := defaultSource.LoadFonts(d.Fonts)
 	if len(fontsArray) == 0 {
 		fontsArray = defaultSource.LoadAll()
@@ -98,7 +98,7 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	// 背景有文字干扰
 	if d.NoiseCount > 0 {
 		noise := RandText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
-		err = itemChar.drawNoise(noise, fontLoader.DefaultSource.LoadAll())
+		err = itemChar.drawNoise(noise, font.DefaultSource.LoadAll())
 		if err != nil {
 			return
 		}
