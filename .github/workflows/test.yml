@@ -20,11 +20,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create coverage file
-        run: go test -coverprofile='coverage.txt' -covermode=atomic
+      - name: Test
+        run: go test ./...
 
-      - name: Upload coverage file
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: golang-module/base64Captcha
