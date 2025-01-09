@@ -1,22 +1,32 @@
-package base64Captcha
+package char
 
 import (
 	"bytes"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"github.com/golang-module/base64Captcha/driver"
+	"io"
+	"log"
+	"math"
+	mathRand "math/rand"
+
 	"image"
 	"image/color"
 	"image/draw"
 	"image/png"
-	"io"
-	"log"
-	"math"
 
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	imageFont "golang.org/x/image/font"
+)
+
+const (
+	// MimeTypeImage output base64 mine-type.
+	MimeTypeImage = "image/png"
+
+	imageStringDpi = 72.0
 )
 
 // ItemChar captcha item of unicode characters
@@ -36,20 +46,20 @@ func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	return &d
 }
 
-// drawHollowLine draw strong and bold white line.
-func (item *ItemChar) drawHollowLine() *ItemChar {
+// DrawHollowLine draw strong and bold white line.
+func (item *ItemChar) DrawHollowLine() *ItemChar {
 
 	first := item.width / 20
 	end := first * 19
 
-	lineColor := RandLightColor()
+	lineColor := driver.RandomColor()
 
-	x1 := float64(randIntn(first))
-	// y1 := float64(randIntn(y)+y);
+	x1 := float64(driver.RandomInt(first))
+	// y1 := float64(RandomInt(y)+y);
 
-	x2 := float64(randIntn(first) + end)
+	x2 := float64(driver.RandomInt(first) + end)
 
-	multiple := float64(randIntn(5)+3) / float64(5)
+	multiple := float64(driver.RandomInt(5)+3) / float64(5)
 	if int(multiple*10)%3 == 0 {
 		multiple = multiple * -1.0
 	}
@@ -73,12 +83,12 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 	return item
 }
 
-// drawSineLine draw a sine line.
-func (item *ItemChar) drawSineLine() *ItemChar {
+// DrawSineLine draw a sine line.
+func (item *ItemChar) DrawSineLine() *ItemChar {
 	var py float64
 
 	// 振幅
-	h := randIntn(item.height / 2)
+	h := driver.RandomInt(item.height / 2)
 
 	// X 轴方向偏移量
 	x := random(int64(-item.height/4), int64(item.height/4))
@@ -117,8 +127,8 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 	return item
 }
 
-// drawSlimLine draw n slim-random-color lines.
-func (item *ItemChar) drawSlimLine(num int) *ItemChar {
+// DrawSlimLine draw n slim-random-color lines.
+func (item *ItemChar) DrawSlimLine(num int) *ItemChar {
 
 	first := item.width / 10
 	end := first * 9
@@ -127,24 +137,24 @@ func (item *ItemChar) drawSlimLine(num int) *ItemChar {
 
 	for i := 0; i < num; i++ {
 
-		point1 := point{X: randIntn(first), Y: randIntn(y)}
-		point2 := point{X: randIntn(first) + end, Y: randIntn(y)}
+		point1 := point{X: driver.RandomInt(first), Y: driver.RandomInt(y)}
+		point2 := point{X: driver.RandomInt(first) + end, Y: driver.RandomInt(y)}
 
 		if i%2 == 0 {
-			point1.Y = randIntn(y) + y*2
-			point2.Y = randIntn(y)
+			point1.Y = driver.RandomInt(y) + y*2
+			point2.Y = driver.RandomInt(y)
 		} else {
-			point1.Y = randIntn(y) + y*(i%2)
-			point2.Y = randIntn(y) + y*2
+			point1.Y = driver.RandomInt(y) + y*(i%2)
+			point2.Y = driver.RandomInt(y) + y*2
 		}
 
-		item.drawBeeline(point1, point2, RandDeepColor())
+		item.DrawBeeline(point1, point2, RandDeepColor())
 
 	}
 	return item
 }
 
-func (item *ItemChar) drawBeeline(point1 point, point2 point, lineColor color.RGBA) {
+func (item *ItemChar) DrawBeeline(point1 point, point2 point, lineColor color.RGBA) {
 	dx := math.Abs(float64(point1.X - point2.X))
 	dy := math.Abs(float64(point2.Y - point1.Y))
 	sx, sy := 1, 1
@@ -176,20 +186,20 @@ func (item *ItemChar) drawBeeline(point1 point, point2 point, lineColor color.RG
 	}
 }
 
-func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error {
+func (item *ItemChar) DrawNoise(noiseText string, fonts []*truetype.Font) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
 	c.SetClip(item.nrgba.Bounds())
 	c.SetDst(item.nrgba)
 	c.SetHinting(imageFont.HintingFull)
-	rawFontSize := float64(item.height) / (1 + float64(randIntn(7))/float64(10))
+	rawFontSize := float64(item.height) / (1 + float64(driver.RandomInt(7))/float64(10))
 
 	for _, char := range noiseText {
-		rw := randIntn(item.width)
-		rh := randIntn(item.height)
-		fontSize := rawFontSize/2 + float64(randIntn(5))
-		c.SetSrc(image.NewUniform(RandLightColor()))
+		rw := driver.RandomInt(item.width)
+		rh := driver.RandomInt(item.height)
+		fontSize := rawFontSize/2 + float64(driver.RandomInt(5))
+		c.SetSrc(image.NewUniform(driver.RandomColor()))
 		c.SetFontSize(fontSize)
 		c.SetFont(randFontFrom(fonts))
 		pt := freetype.Pt(rw, rh)
@@ -202,7 +212,7 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 
 // drawText draw captcha string to image.
 
-func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
+func (item *ItemChar) DrawText(text string, fonts []*truetype.Font) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 	c.SetClip(item.nrgba.Bounds())
@@ -216,12 +226,12 @@ func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 	fontWidth := item.width / len(text)
 
 	for i, s := range text {
-		fontSize := item.height * (randIntn(7) + 7) / 16
+		fontSize := item.height * (driver.RandomInt(7) + 7) / 16
 		c.SetSrc(image.NewUniform(RandDeepColor()))
 		c.SetFontSize(float64(fontSize))
 		c.SetFont(randFontFrom(fonts))
 		x := fontWidth*i + fontWidth/fontSize
-		y := item.height/2 + fontSize/2 - randIntn(item.height/16*3)
+		y := item.height/2 + fontSize/2 - driver.RandomInt(item.height/16*3)
 		pt := freetype.Pt(x, y)
 		if _, err := c.DrawString(string(s), pt); err != nil {
 			return err
@@ -264,6 +274,41 @@ func randFontFrom(fonts []*truetype.Font) *truetype.Font {
 		fonts = font.DefaultSource.LoadAll()
 		fontCount = len(fonts)
 	}
-	index := randIntn(fontCount)
+	index := driver.RandomInt(fontCount)
 	return fonts[index]
+}
+
+func random(min int64, max int64) float64 {
+	return float64(min) + mathRand.Float64()*float64(max-min)
+}
+
+// RandDeepColor get random deep color. 随机生成深色系.
+func RandDeepColor() color.RGBA {
+
+	randColor := RandColor()
+
+	increase := float64(30 + driver.RandomInt(255))
+
+	red := math.Abs(math.Min(float64(randColor.R)-increase, 255))
+
+	green := math.Abs(math.Min(float64(randColor.G)-increase, 255))
+	blue := math.Abs(math.Min(float64(randColor.B)-increase, 255))
+
+	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
+}
+
+// RandColor get random color. 生成随机颜色.
+func RandColor() color.RGBA {
+	red := driver.RandomInt(255)
+	green := driver.RandomInt(255)
+	var blue int
+	if (red + green) > 400 {
+		blue = 0
+	} else {
+		blue = 400 - green - red
+	}
+	if blue > 255 {
+		blue = 255
+	}
+	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
