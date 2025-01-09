@@ -1,11 +1,13 @@
-package base64Captcha
+package math
 
 import (
 	"fmt"
+	"github.com/golang-module/base64Captcha/driver/char"
 	"image/color"
 	"math/rand"
 	"strings"
 
+	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
@@ -54,7 +56,7 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 
 // GenerateIdQuestionAnswer creates id,captcha content and answer
 func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
-	id = RandomId()
+	id = driver.RandomString()
 	operators := []string{"+", "-", "x"}
 	var mathResult int32
 	switch operators[rand.Int31n(3)] {
@@ -81,24 +83,24 @@ func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
 }
 
 // DrawCaptcha creates math captcha item
-func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
+func (d *DriverMath) DrawCaptcha(question string) (item driver.Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = RandLightColor()
+		bgc = char.RandColor()
 	}
-	itemChar := NewItemChar(d.Width, d.Height, bgc)
+	itemChar := char.NewItemChar(d.Width, d.Height, bgc)
 
 	// 波浪线 比较丑
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
-		itemChar.drawHollowLine()
+		itemChar.DrawHollowLine()
 	}
 
 	// 背景有文字干扰
 	if d.NoiseCount > 0 {
-		noise := RandText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
-		err = itemChar.drawNoise(noise, font.DefaultSource.LoadAll())
+		noise := driver.RandomText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
+		err = itemChar.DrawNoise(noise, font.DefaultSource.LoadAll())
 		if err != nil {
 			return
 		}
@@ -106,16 +108,16 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 
 	// 画 细直线 (n 条)
 	if d.ShowLineOptions&OptionShowSlimeLine == OptionShowSlimeLine {
-		itemChar.drawSlimLine(3)
+		itemChar.DrawSlimLine(3)
 	}
 
 	// 画 多个小波浪线
 	if d.ShowLineOptions&OptionShowSineLine == OptionShowSineLine {
-		itemChar.drawSineLine()
+		itemChar.DrawSineLine()
 	}
 
 	// draw question
-	err = itemChar.drawText(question, d.fontsArray)
+	err = itemChar.DrawText(question, d.fontsArray)
 	if err != nil {
 		return
 	}

@@ -8,7 +8,7 @@ import (
 )
 
 func TestSetGet(t *testing.T) {
-	s := NewMemoryStore(GCLimitNumber, Expiration)
+	s := NewStoreMemory(GCLimitNumber, Expiration)
 	id := "captcha id"
 	d := "random-string"
 	_ = s.Set(id, d)
@@ -19,7 +19,7 @@ func TestSetGet(t *testing.T) {
 }
 
 func TestGetClear(t *testing.T) {
-	s := NewMemoryStore(GCLimitNumber, Expiration)
+	s := NewStoreMemory(GCLimitNumber, Expiration)
 	id := "captcha id"
 	d := "932839jfffjkdss"
 	_ = s.Set(id, d)
@@ -36,7 +36,7 @@ func TestGetClear(t *testing.T) {
 func BenchmarkSetCollect(b *testing.B) {
 	b.StopTimer()
 	d := "fdskfew9832232r"
-	s := NewMemoryStore(9999, -1)
+	s := NewStoreMemory(9999, -1)
 	ids := make([]string, 1000)
 	for i := range ids {
 		ids[i] = fmt.Sprintf("%d", rand.Int63())
@@ -50,14 +50,14 @@ func BenchmarkSetCollect(b *testing.B) {
 }
 
 func TestMemoryStore_SetGoCollect(t *testing.T) {
-	s := NewMemoryStore(10, -1)
+	s := NewStoreMemory(10, -1)
 	for i := 0; i <= 100; i++ {
 		_ = s.Set(fmt.Sprint(i), fmt.Sprint(i))
 	}
 }
 
 func TestMemoryStore_CollectNotExpire(t *testing.T) {
-	s := NewMemoryStore(10, time.Hour)
+	s := NewStoreMemory(10, time.Hour)
 	for i := 0; i < 50; i++ {
 		_ = s.Set(fmt.Sprint(i), fmt.Sprint(i))
 	}
@@ -85,7 +85,7 @@ func TestNewMemoryStore(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewMemoryStore(tt.args.collectNum, tt.args.expiration); got == nil {
+			if got := NewStoreMemory(tt.args.collectNum, tt.args.expiration); got == nil {
 				t.Errorf("NewMemoryStore() = %v, want %v", got, tt.want)
 			}
 		})
@@ -93,7 +93,7 @@ func TestNewMemoryStore(t *testing.T) {
 }
 
 func Test_memoryStore_Verify(t *testing.T) {
-	thisStore := NewMemoryStore(10, time.Hour)
+	thisStore := NewStoreMemory(10, time.Hour)
 	_ = thisStore.Set("xx", "xx")
 	got := thisStore.Verify("xx", "xx", false)
 	if !got {
@@ -109,14 +109,14 @@ func Test_memoryStore_Verify(t *testing.T) {
 	if got {
 		t.Error("failed3")
 	}
-	got = DefaultMemoryStore.Verify("saaf", "", true)
+	got = DefaultStoreMemory.Verify("saaf", "", true)
 	if got {
 		t.Error("CVE-2023-45292 GO-2023-2386")
 	}
 }
 
 func Test_memoryStore_Get(t *testing.T) {
-	thisStore := NewMemoryStore(10, time.Hour)
+	thisStore := NewStoreMemory(10, time.Hour)
 	_ = thisStore.Set("xx", "xx")
 	got := thisStore.Get("xx", false)
 	if got != "xx" {
@@ -130,5 +130,4 @@ func Test_memoryStore_Get(t *testing.T) {
 	if got == "xx" {
 		t.Error("failed3")
 	}
-
 }

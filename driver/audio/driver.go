@@ -1,4 +1,8 @@
-package base64Captcha
+package audio
+
+import (
+	"github.com/golang-module/base64Captcha/driver"
+)
 
 // DriverAudio captcha config for captcha-engine-audio.
 type DriverAudio struct {
@@ -17,7 +21,7 @@ func NewDriverAudio(length int, language string) *DriverAudio {
 }
 
 // DrawCaptcha creates audio captcha item
-func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
+func (d *DriverAudio) DrawCaptcha(content string) (item driver.Item, err error) {
 	digits := stringToFakeByte(content)
 	audio := newAudio(digits, d.Language)
 	return audio, nil
@@ -25,8 +29,8 @@ func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
 
 // GenerateIdQuestionAnswer creates id,captcha content and answer
 func (d *DriverAudio) GenerateIdQuestionAnswer() (id, q, a string) {
-	id = RandomId()
-	digits := randomDigits(d.Length)
+	id = driver.RandomString()
+	digits := driver.RandomDigits(d.Length)
 	a = parseDigitsToString(digits)
 	return id, a, a
 }

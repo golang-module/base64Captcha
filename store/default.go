@@ -8,6 +8,6 @@ var (
 	// Expiration time of captchas used by default store.
 	Expiration = 10 * time.Minute
 
-	DefaultMemoryStore  = NewMemoryStore(GCLimitNumber, Expiration)
-	DefaultSyncMapStore = NewSyncMapStore(Expiration)
+	DefaultStoreMemory  = NewStoreMemory(GCLimitNumber, Expiration)
+	DefaultStoreSyncMap = NewStoreSyncMap(Expiration)
 )

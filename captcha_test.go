@@ -1,20 +1,24 @@
 package base64Captcha
 
 import (
+	"github.com/golang-module/base64Captcha/driver"
+	mathRand "math/rand"
 	"reflect"
 	"testing"
 
+	"github.com/golang-module/base64Captcha/driver/audio"
+	"github.com/golang-module/base64Captcha/driver/digit"
 	"github.com/golang-module/base64Captcha/store"
 )
 
 func TestCaptcha_GenerateB64s(t *testing.T) {
 	type fields struct {
-		Driver Driver
+		Driver driver.Driver
 		Store  store.Store
 	}
 
-	dDigit := DriverDigit{80, 240, 5, 0.7, 5}
-	audioDriver := NewDriverAudio(randIntn(5), "en")
+	dDigit := digit.DriverDigit{80, 240, 5, 0.7, 5}
+	audioDriver := audio.NewDriverAudio(randIntn(5), "en")
 	tests := []struct {
 		name     string
 		fields   fields
@@ -22,8 +26,8 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 		wantB64s string
 		wantErr  bool
 	}{
-		{"mem-digit", fields{&dDigit, store.DefaultMemoryStore}, "xxxx", "", false},
-		{"mem-audio", fields{audioDriver, store.DefaultMemoryStore}, "xxxx", "", false},
+		{"mem-digit", fields{&dDigit, store.DefaultStoreMemory}, "xxxx", "", false},
+		{"mem-audio", fields{audioDriver, store.DefaultStoreMemory}, "xxxx", "", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -45,7 +49,7 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 
 func TestCaptcha_Verify(t *testing.T) {
 	type fields struct {
-		Driver Driver
+		Driver driver.Driver
 		Store  store.Store
 	}
 	type args struct {
@@ -76,7 +80,7 @@ func TestCaptcha_Verify(t *testing.T) {
 
 func TestNewCaptcha(t *testing.T) {
 	type args struct {
-		driver Driver
+		driver driver.Driver
 		store  store.Store
 	}
 	tests := []struct {
@@ -120,4 +124,11 @@ func TestCaptcha_Generate(t *testing.T) {
 			}
 		})
 	}
+}
+
+func randIntn(n int) int {
+	if n > 0 {
+		return mathRand.Intn(n)
+	}
+	return 0
 }

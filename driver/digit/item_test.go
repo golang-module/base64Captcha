@@ -1,4 +1,4 @@
-package base64Captcha
+package digit
 
 import (
 	"bytes"

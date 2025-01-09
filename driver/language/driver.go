@@ -1,9 +1,11 @@
-package base64Captcha
+package language
 
 import (
+	"github.com/golang-module/base64Captcha/driver/char"
 	"image/color"
 	"log"
 
+	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
@@ -33,7 +35,7 @@ func generateRandomRune(size int, code string) string {
 	end := lang[1]
 	randRune := make([]rune, size)
 	for i := range randRune {
-		idx := randIntn(end-start) + start
+		idx := driver.RandomInt(end-start) + start
 		randRune[i] = rune(idx)
 	}
 	return string(randRune)
@@ -70,42 +72,42 @@ func NewDriverLanguage(height int, width int, noiseCount int, showLineOptions in
 
 // GenerateIdQuestionAnswer creates content and answer
 func (d *DriverLanguage) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = RandomId()
+	id = driver.RandomString()
 	content = generateRandomRune(d.Length, d.LanguageCode)
 	return id, content, content
 }
 
 // DrawCaptcha creates item
-func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
+func (d *DriverLanguage) DrawCaptcha(content string) (item driver.Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = RandLightColor()
+		bgc = char.RandColor()
 	}
-	itemChar := NewItemChar(d.Width, d.Height, bgc)
+	itemChar := char.NewItemChar(d.Width, d.Height, bgc)
 
 	// draw hollow line
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
-		itemChar.drawHollowLine()
+		itemChar.DrawHollowLine()
 	}
 
 	// draw slime line
 	if d.ShowLineOptions&OptionShowSlimeLine == OptionShowSlimeLine {
-		itemChar.drawSlimLine(3)
+		itemChar.DrawSlimLine(3)
 	}
 
 	// draw sine line
 	if d.ShowLineOptions&OptionShowSineLine == OptionShowSineLine {
-		itemChar.drawSineLine()
+		itemChar.DrawSineLine()
 	}
 
 	defaultSource := font.DefaultSource
 
 	// draw noise
 	if d.NoiseCount > 0 {
-		noise := RandText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
-		err = itemChar.drawNoise(noise, defaultSource.LoadAll())
+		noise := driver.RandomText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
+		err = itemChar.DrawNoise(noise, defaultSource.LoadAll())
 		if err != nil {
 			return
 		}
@@ -114,7 +116,7 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 	// draw content
 	// use font that match your language
 	fontChinese := defaultSource.LoadChinese()
-	err = itemChar.drawText(content, []*truetype.Font{fontChinese})
+	err = itemChar.DrawText(content, []*truetype.Font{fontChinese})
 	if err != nil {
 		return
 	}

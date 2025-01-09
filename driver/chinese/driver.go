@@ -1,9 +1,11 @@
-package base64Captcha
+package chinese
 
 import (
 	"image/color"
 	"strings"
 
+	"github.com/golang-module/base64Captcha/driver"
+	"github.com/golang-module/base64Captcha/driver/char"
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
@@ -58,21 +60,21 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 
 // GenerateIdQuestionAnswer generates captcha content and its answer
 func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = RandomId()
+	id = driver.RandomString()
 	ss := strings.Split(d.Source, ",")
 	length := len(ss)
 	if length == 1 {
-		c := RandText(d.Length, ss[0])
+		c := driver.RandomText(d.Length, ss[0])
 		return id, c, c
 	}
 	if length <= d.Length {
-		c := RandText(d.Length, TxtNumbers+TxtAlphabet)
+		c := driver.RandomText(d.Length, TxtNumbers+TxtAlphabet)
 		return id, c, c
 	}
 
 	res := make([]string, d.Length)
 	for k := range res {
-		res[k] = ss[randIntn(length)]
+		res[k] = ss[driver.RandomInt(length)]
 	}
 
 	content = strings.Join(res, "")
@@ -80,42 +82,42 @@ func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) 
 }
 
 // DrawCaptcha generates captcha item(image)
-func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
+func (d *DriverChinese) DrawCaptcha(content string) (item driver.Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = RandLightColor()
+		bgc = char.RandColor()
 	}
-	itemChar := NewItemChar(d.Width, d.Height, bgc)
+	itemChar := char.NewItemChar(d.Width, d.Height, bgc)
 
 	// draw hollow line
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
-		itemChar.drawHollowLine()
+		itemChar.DrawHollowLine()
 	}
 
 	// draw slime line
 	if d.ShowLineOptions&OptionShowSlimeLine == OptionShowSlimeLine {
-		itemChar.drawSlimLine(3)
+		itemChar.DrawSlimLine(3)
 	}
 
 	// draw sine line
 	if d.ShowLineOptions&OptionShowSineLine == OptionShowSineLine {
-		itemChar.drawSineLine()
+		itemChar.DrawSineLine()
 	}
 
 	// draw noise
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
-		noise := RandText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
-		err = itemChar.drawNoise(noise, d.fontsArray)
+		noise := driver.RandomText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
+		err = itemChar.DrawNoise(noise, d.fontsArray)
 		if err != nil {
 			return
 		}
 	}
 
 	// draw content
-	err = itemChar.drawText(content, d.fontsArray)
+	err = itemChar.DrawText(content, d.fontsArray)
 	if err != nil {
 		return
 	}

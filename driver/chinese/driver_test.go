@@ -1,9 +1,11 @@
-package base64Captcha
+package chinese
 
 import (
 	"image/color"
 	"reflect"
 	"testing"
+
+	"github.com/golang-module/base64Captcha/driver"
 )
 
 func TestNewDriverChinese(t *testing.T) {
@@ -84,7 +86,7 @@ func TestDriverChinese_DrawCaptcha(t *testing.T) {
 		name     string
 		d        *DriverChinese
 		args     args
-		wantItem Item
+		wantItem driver.Item
 		wantErr  bool
 	}{
 		// TODO: Add test cases.

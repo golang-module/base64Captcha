@@ -1,9 +1,11 @@
-package base64Captcha
+package string
 
 import (
+	"github.com/golang-module/base64Captcha/driver/char"
 	"image/color"
 	"strings"
 
+	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
@@ -59,49 +61,49 @@ func (d *DriverString) ConvertFonts() *DriverString {
 
 // GenerateIdQuestionAnswer creates id,content and answer
 func (d *DriverString) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = RandomId()
-	content = RandText(d.Length, d.Source)
+	id = driver.RandomString()
+	content = driver.RandomText(d.Length, d.Source)
 	return id, content, content
 }
 
 // DrawCaptcha draws captcha item
-func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
+func (d *DriverString) DrawCaptcha(content string) (item driver.Item, err error) {
 
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = RandLightColor()
+		bgc = char.RandColor()
 	}
-	itemChar := NewItemChar(d.Width, d.Height, bgc)
+	itemChar := char.NewItemChar(d.Width, d.Height, bgc)
 
 	// draw hollow line
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
-		itemChar.drawHollowLine()
+		itemChar.DrawHollowLine()
 	}
 
 	// draw slime line
 	if d.ShowLineOptions&OptionShowSlimeLine == OptionShowSlimeLine {
-		itemChar.drawSlimLine(3)
+		itemChar.DrawSlimLine(3)
 	}
 
 	// draw sine line
 	if d.ShowLineOptions&OptionShowSineLine == OptionShowSineLine {
-		itemChar.drawSineLine()
+		itemChar.DrawSineLine()
 	}
 
 	// draw noise
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
-		noise := RandText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
-		err = itemChar.drawNoise(noise, d.fontsArray)
+		noise := driver.RandomText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
+		err = itemChar.DrawNoise(noise, d.fontsArray)
 		if err != nil {
 			return
 		}
 	}
 
 	// draw content
-	err = itemChar.drawText(content, d.fontsArray)
+	err = itemChar.DrawText(content, d.fontsArray)
 	if err != nil {
 		return
 	}

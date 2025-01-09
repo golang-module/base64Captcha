@@ -1,10 +1,11 @@
-package base64Captcha
+package audio
 
 import (
 	"bytes"
 	"encoding/base64"
 	"encoding/binary"
 	"fmt"
+	"github.com/golang-module/base64Captcha/driver"
 	"io"
 )
 
@@ -73,9 +74,9 @@ func (a *ItemAudio) encodedLen() int {
 func (a *ItemAudio) makeBackgroundSound(length int) []byte {
 	b := a.makeWhiteNoise(length, 4)
 	for i := 0; i < length/(sampleRate/10); i++ {
-		snd := reversedSound(a.digitSounds[randIntn(10)])
+		snd := reversedSound(a.digitSounds[driver.RandomInt(10)])
 		// snd = changeSpeed(snd, a.rng.Float(0.8, 1.2))
-		place := randIntn(len(b) - len(snd))
+		place := driver.RandomInt(len(b) - len(snd))
 		setSoundLevel(snd, randFloat64Range(0.04, 0.08))
 		mixSound(b[place:], snd)
 	}
