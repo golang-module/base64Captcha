@@ -1,6 +1,10 @@
-package base64Captcha
+package digit
 
-import "math/rand"
+import (
+	"math/rand/v2"
+
+	"github.com/golang-module/base64Captcha/driver"
+)
 
 var digitFontData = [][]byte{
 	{ // 0
@@ -229,8 +233,8 @@ var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
 
 // GenerateIdQuestionAnswer creates captcha content and answer
 func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
-	id = RandomId()
-	digits := randomDigits(d.Length)
+	id = driver.RandomString()
+	digits := driver.RandomDigits(d.Length)
 	a = parseDigitsToString(digits)
 	return id, a, a
 }
@@ -238,13 +242,13 @@ func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
 // GenerateSpecificIdQuestionAnswer creates captcha content and answer
 func (d *DriverDigit) GenerateSpecificIdQuestionAnswer(mId string) (id, q, a string) {
 	id = mId
-	digits := randomDigits(d.Length)
+	digits := driver.RandomDigits(d.Length)
 	a = parseDigitsToString(digits)
 	return id, a, a
 }
 
 // DrawCaptcha creates digit captcha item
-func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
+func (d *DriverDigit) DrawCaptcha(content string) (item driver.Item, err error) {
 	// Initialize PRNG.
 	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
 	// parse digits to string
@@ -260,8 +264,8 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	} else {
 		border = d.Width / 5
 	}
-	x := randIntn(maxX-border*2) + border
-	y := randIntn(maxY-border*2) + border
+	x := driver.RandomInt(maxX-border*2) + border
+	y := driver.RandomInt(maxY-border*2) + border
 	// Draw digits.
 	for _, n := range digits {
 		itemDigit.drawDigit(digitFontData[n], x, y)
