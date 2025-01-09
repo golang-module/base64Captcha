@@ -40,8 +40,6 @@ store = storer.DefaultSyncMapStore
 ```go
 driver = base64Captcha.NewDriverDigit(80, 240, 4, 0.8, 80)
 captcha := base64Captcha.NewCaptcha(driver, storer)
-// 或者使用 SetSore 方法
-captcha := base64Captcha.NewCaptcha(driver).SetSore(storer)
 
 // 生成验证码
 id, src, answer, err = captcha.Generate()
