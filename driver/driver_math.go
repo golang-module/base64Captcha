@@ -42,7 +42,7 @@ func NewDriverMath(d DriverMath) *DriverMath {
 	return mergeDriverMath(d)
 }
 
-// mergeDriverMath merge default config
+// mergeDriverMath merges default driver with given math driver
 func mergeDriverMath(d DriverMath) *DriverMath {
 	if d.Height == 0 {
 		d.Height = DefaultDriverMath.Height
