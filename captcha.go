@@ -40,7 +40,7 @@ func (c *Captcha) Generate() (id, src, answer string, err error) {
 	if err != nil {
 		return
 	}
-	src = item.EncodeB64string()
+	src = item.Encoder()
 	return
 }
 
