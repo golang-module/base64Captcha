@@ -16,6 +16,7 @@ const (
 	TxtAlphabet  = "ABCDEFGHJKMNOQRSTUVXYZabcdefghjkmnoqrstuvxyz"
 )
 
+// RandomInt returns a random integer in range [0, n)]
 func RandomInt(n int) int {
 	if n > 0 {
 		return mathRand.IntN(n)
@@ -23,6 +24,7 @@ func RandomInt(n int) int {
 	return 0
 }
 
+// RandomString returns a random string of given size.
 func RandomString() string {
 	var bytes = []byte(TxtNumbers + TxtAlphabet)
 	b := randomBytesMod(StringLength, byte(len(bytes)))
@@ -32,7 +34,7 @@ func RandomString() string {
 	return string(b)
 }
 
-// RandomText creates random text of given size.
+// RandomText returns a random string of given size.
 func RandomText(size int, sourceChars string) string {
 	if sourceChars == "" || size == 0 {
 		return ""
@@ -52,9 +54,7 @@ func RandomText(size int, sourceChars string) string {
 	return string(text)
 }
 
-// RandomDigits returns a byte slice of the given length containing
-// pseudorandom numbers in range 0-9. The slice can be used as a captcha
-// solution.
+// RandomDigits returns a byte slice of the given length, where each byte is a
 func RandomDigits(length int) []byte {
 	return randomBytesMod(length, 10)
 }
@@ -68,6 +68,7 @@ func RandomBytes(length int) (b []byte) {
 	return
 }
 
+// RandomColor returns a random color.RGBA.
 func RandomColor() color.RGBA {
 	red := RandomInt(55) + 200
 	green := RandomInt(55) + 200
@@ -103,6 +104,7 @@ func randomBytesMod(length int, mod byte) (b []byte) {
 	}
 }
 
+// RandomRange returns a random number in range [from, to).]
 func RandomRange[T int | float64](from, to T) T {
 	if to-from <= 0 {
 		return from
