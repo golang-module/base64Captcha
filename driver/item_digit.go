@@ -134,11 +134,8 @@ func (m *ItemDigit) fillWithCircles(n, maxradius int) {
 	maxX := m.Bounds().Max.X
 	maxY := m.Bounds().Max.Y
 	for i := 0; i < n; i++ {
-		// colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
 		colorIdx := uint8(RandomRange(1, m.dotCount-1))
-		// r := m.rng.Int(1, maxradius)
 		r := RandomRange(1, maxradius)
-		// m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
 		m.drawCircle(RandomRange(r, maxX-r), RandomRange(r, maxY-r), r, colorIdx)
 	}
 }
