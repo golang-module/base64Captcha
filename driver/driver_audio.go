@@ -9,8 +9,19 @@ type DriverAudio struct {
 }
 
 // NewDriverAudio creates a driver of audio
-func NewDriverAudio(length int, language string) *DriverAudio {
-	return &DriverAudio{Length: length, Language: language}
+func NewDriverAudio(d DriverAudio) *DriverAudio {
+	return mergeDriverAudio(d)
+}
+
+// mergeDriverAudio merges default driver with given audio driver
+func mergeDriverAudio(d DriverAudio) *DriverAudio {
+	if d.Length == 0 {
+		d.Length = DefaultDriverAudio.Length
+	}
+	if d.Language == "" {
+		d.Language = DefaultDriverAudio.Language
+	}
+	return &d
 }
 
 // DrawCaptcha creates audio captcha item
