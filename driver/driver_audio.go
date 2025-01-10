@@ -8,9 +8,6 @@ type DriverAudio struct {
 	Language string
 }
 
-// DefaultDriverAudio is a default audio driver
-var DefaultDriverAudio = NewDriverAudio(6, "en")
-
 // NewDriverAudio creates a driver of audio
 func NewDriverAudio(length int, language string) *DriverAudio {
 	return &DriverAudio{Length: length, Language: language}
