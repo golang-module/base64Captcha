@@ -10,6 +10,10 @@ import (
 	"math/rand/v2"
 )
 
+const (
+	soundRate = 8000 // Hz
+)
+
 var endingBeepSound []byte
 
 func init() {
@@ -45,14 +49,14 @@ func newAudio(digits []byte, lang string) *ItemAudio {
 	intervals := make([]int, len(digits)+1)
 	intdur := 0
 	for i := range intervals {
-		dur := RandomRange(sampleRate, sampleRate*2) // 1 to 2 seconds
+		dur := RandomRange(soundRate, soundRate*2) // 1 to 2 seconds
 		intdur += dur
 		intervals[i] = dur
 	}
 	// Generate background sound.
 	bg := a.makeBackgroundSound(a.longestDigitSndLen()*len(digits) + intdur)
 	// Create buffer and write audio to it.
-	sil := a.makeSilence(sampleRate / 5)
+	sil := a.makeSilence(soundRate / 5)
 	bufCap := 3*len(beepSound) + 2*len(sil) + len(bg) + len(endingBeepSound)
 	a.body = bytes.NewBuffer(make([]byte, 0, bufCap))
 	// Write prelude, three beeps.
@@ -238,7 +242,7 @@ func (a *ItemAudio) makeNoise(n int) []byte {
 // makeBackgroundSound returns a background sound.
 func (a *ItemAudio) makeBackgroundSound(length int) []byte {
 	noise := a.makeWhiteNoise(length, 4)
-	for i := 0; i < length/(sampleRate/10); i++ {
+	for i := 0; i < length/(soundRate/10); i++ {
 		sound := a.reversedSound(a.digitSounds[RandomInt(10)])
 		// snd = changeSpeed(snd, a.rng.Float(0.8, 1.2))
 		place := RandomInt(len(noise) - len(sound))
