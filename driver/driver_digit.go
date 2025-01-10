@@ -230,7 +230,7 @@ func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount
 func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
 	id = RandomString()
 	digits := RandomDigits(d.Length)
-	a = parseDigitsToString(digits)
+	a = digits2String(digits)
 	return id, a, a
 }
 
@@ -238,7 +238,7 @@ func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
 func (d *DriverDigit) GenerateSpecificIdQuestionAnswer(mId string) (id, q, a string) {
 	id = mId
 	digits := RandomDigits(d.Length)
-	a = parseDigitsToString(digits)
+	a = digits2String(digits)
 	return id, a, a
 }
 
@@ -247,7 +247,7 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Initialize PRNG.
 	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
 	// parse digits to string
-	digits := stringToFakeByte(content)
+	digits := string2digits(content)
 
 	itemDigit.calculateSizes(d.Width, d.Height, len(digits))
 	// Randomly position captcha inside the image.

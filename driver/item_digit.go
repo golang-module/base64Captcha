@@ -136,20 +136,20 @@ func (m *ItemDigit) fillWithCircles(n, maxradius int) {
 	maxY := m.Bounds().Max.Y
 	for i := 0; i < n; i++ {
 		// colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
-		colorIdx := uint8(randIntRange(1, m.dotCount-1))
+		colorIdx := uint8(RandomRange(1, m.dotCount-1))
 		// r := m.rng.Int(1, maxradius)
-		r := randIntRange(1, maxradius)
+		r := RandomRange(1, maxradius)
 		// m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
-		m.drawCircle(randIntRange(r, maxX-r), randIntRange(r, maxY-r), r, colorIdx)
+		m.drawCircle(RandomRange(r, maxX-r), RandomRange(r, maxY-r), r, colorIdx)
 	}
 }
 
 func (m *ItemDigit) strikeThrough() {
 	maxX := m.Bounds().Max.X
 	maxY := m.Bounds().Max.Y
-	y := randIntRange(maxY/3, maxY-maxY/3)
-	amplitude := randFloat64Range(5, 20)
-	period := randFloat64Range(80, 180)
+	y := RandomRange(maxY/3, maxY-maxY/3)
+	amplitude := RandomRange(5.0, 20.0)
+	period := RandomRange(80.0, 180.0)
 	dx := 2.0 * math.Pi / period
 	for x := 0; x < maxX; x++ {
 		xo := amplitude * math.Cos(float64(y)*dx)
@@ -164,10 +164,10 @@ func (m *ItemDigit) strikeThrough() {
 
 // draw digit
 func (m *ItemDigit) drawDigit(digit []byte, x, y int) {
-	skf := randFloat64Range(-m.maxSkew, m.maxSkew)
+	skf := RandomRange(-m.maxSkew, m.maxSkew)
 	xs := float64(x)
 	r := m.dotSize / 2
-	y += randIntRange(-r, r)
+	y += RandomRange(-r, r)
 	for yo := 0; yo < digitFontHeight; yo++ {
 		for xo := 0; xo < digitFontWidth; xo++ {
 			if digit[yo*digitFontWidth+xo] != digitFontBlackChar {
@@ -254,4 +254,22 @@ func (m *ItemDigit) WriteTo(w io.Writer) (int64, error) {
 // EncodeB64string encodes an image to base64 string
 func (m *ItemDigit) EncodeB64string() string {
 	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(m.EncodeBinary()))
+}
+
+// string2digits converts string to digits
+func string2digits(content string) []byte {
+	digits := make([]byte, len(content))
+	for idx, cc := range content {
+		digits[idx] = byte(cc - '0')
+	}
+	return digits
+}
+
+// digits2String converts digits to string
+func digits2String(bytes []byte) string {
+	stringB := make([]byte, len(bytes))
+	for idx, by := range bytes {
+		stringB[idx] = by + '0'
+	}
+	return string(stringB)
 }
