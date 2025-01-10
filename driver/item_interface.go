@@ -6,8 +6,8 @@ import (
 
 // Item is captcha item interface
 type Item interface {
-	// WriteTo writes to a writer
-	WriteTo(w io.Writer) (n int64, err error)
-	// EncodeB64string encodes as base64 string
-	EncodeB64string() string
+	// Writer writes to a writer
+	Writer(w io.Writer) (n int64, err error)
+	// EncodeByBase64 encodes as base64 string
+	Encoder() string
 }

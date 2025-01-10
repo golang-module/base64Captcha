@@ -241,15 +241,15 @@ func (item *ItemChar) BinaryEncoding() []byte {
 	return buf.Bytes()
 }
 
-// WriteTo writes captcha character in png format into the given io.Writer, and
+// Writer writes captcha character in png format into the given io.Writer, and
 // returns the number of bytes written and an error if any.
-func (item *ItemChar) WriteTo(w io.Writer) (int64, error) {
+func (item *ItemChar) Writer(w io.Writer) (int64, error) {
 	n, err := w.Write(item.BinaryEncoding())
 	return int64(n), err
 }
 
-// EncodeB64string encodes an image to base64 string
-func (item *ItemChar) EncodeB64string() string {
+// Encoder encodes an image to base64 string
+func (item *ItemChar) Encoder() string {
 	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(item.BinaryEncoding()))
 }
 
