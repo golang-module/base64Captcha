@@ -3,6 +3,7 @@ package driver
 import (
 	"image/color"
 	"io"
+	"math/rand"
 	"strings"
 
 	cryptoRand "crypto/rand"
@@ -100,4 +101,18 @@ func randomBytesMod(length int, mod byte) (b []byte) {
 			}
 		}
 	}
+}
+
+func RandomRange[T int | float64](from, to T) T {
+	if to-from <= 0 {
+		return from
+	}
+	var result T
+	switch any(from).(type) {
+	case int:
+		result = T(mathRand.IntN(int(to-from))) + from
+	case float64:
+		result = T(rand.Float64()*float64(to-from)) + from
+	}
+	return result
 }
