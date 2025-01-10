@@ -15,7 +15,7 @@ func NewDriverAudio(length int, language string) *DriverAudio {
 
 // DrawCaptcha creates audio captcha item
 func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
-	digits := stringToFakeByte(content)
+	digits := string2digits(content)
 	audio := newAudio(digits, d.Language)
 	return audio, nil
 }
@@ -24,6 +24,6 @@ func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
 func (d *DriverAudio) GenerateIdQuestionAnswer() (id, q, a string) {
 	id = RandomString()
 	digits := RandomDigits(d.Length)
-	a = parseDigitsToString(digits)
+	a = digits2String(digits)
 	return id, a, a
 }
