@@ -43,14 +43,6 @@ func mergeDriverDigit(d DriverDigit) *DriverDigit {
 	return &d
 }
 
-// GenerateCaptcha creates captcha content and answer
-func (d *DriverDigit) GenerateCaptcha() (id, q, a string) {
-	id = RandomString()
-	digits := RandomDigits(d.Length)
-	a = digits2String(digits)
-	return id, a, a
-}
-
 // DrawCaptcha creates digit captcha item
 func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Initialize PRNG.
@@ -82,4 +74,12 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Fill image with random circles.
 	itemDigit.fillWithCircles(d.DotCount, itemDigit.dotSize)
 	return itemDigit, nil
+}
+
+// GenerateCaptcha creates captcha content and answer
+func (d *DriverDigit) GenerateCaptcha() (id, q, a string) {
+	id = RandomString()
+	digits := RandomDigits(d.Length)
+	a = digits2String(digits)
+	return id, a, a
 }

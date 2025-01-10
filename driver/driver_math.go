@@ -78,34 +78,6 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 	return d
 }
 
-// GenerateCaptcha creates id,captcha content and answer
-func (d *DriverMath) GenerateCaptcha() (id, question, answer string) {
-	id = RandomString()
-	operators := []string{"+", "-", "x"}
-	var mathResult int32
-	switch operators[rand.Int31n(3)] {
-	case "+":
-		a := rand.Int31n(20)
-		b := rand.Int31n(20)
-		question = fmt.Sprintf("%d+%d=?", a, b)
-		mathResult = a + b
-	case "x":
-		a := rand.Int31n(10)
-		b := rand.Int31n(10)
-		question = fmt.Sprintf("%dx%d=?", a, b)
-		mathResult = a * b
-	default:
-		a := rand.Int31n(80) + rand.Int31n(20)
-		b := rand.Int31n(80)
-
-		question = fmt.Sprintf("%d-%d=?", a, b)
-		mathResult = a - b
-
-	}
-	answer = fmt.Sprintf("%d", mathResult)
-	return
-}
-
 // DrawCaptcha creates math captcha item
 func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	var bgc color.RGBA
@@ -146,4 +118,32 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 		return
 	}
 	return itemChar, nil
+}
+
+// GenerateCaptcha creates id,captcha content and answer
+func (d *DriverMath) GenerateCaptcha() (id, question, answer string) {
+	id = RandomString()
+	operators := []string{"+", "-", "x"}
+	var mathResult int32
+	switch operators[rand.Int31n(3)] {
+	case "+":
+		a := rand.Int31n(20)
+		b := rand.Int31n(20)
+		question = fmt.Sprintf("%d+%d=?", a, b)
+		mathResult = a + b
+	case "x":
+		a := rand.Int31n(10)
+		b := rand.Int31n(10)
+		question = fmt.Sprintf("%dx%d=?", a, b)
+		mathResult = a * b
+	default:
+		a := rand.Int31n(80) + rand.Int31n(20)
+		b := rand.Int31n(80)
+
+		question = fmt.Sprintf("%d-%d=?", a, b)
+		mathResult = a - b
+
+	}
+	answer = fmt.Sprintf("%d", mathResult)
+	return
 }
