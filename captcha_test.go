@@ -16,7 +16,10 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 	}
 
 	dDigit := driver.DriverDigit{80, 240, 5, 0.7, 5}
-	audioDriver := driver.NewDriverAudio(randIntn(5), "en")
+	audioDriver := driver.NewDriverAudio(driver.DriverAudio{
+		Length:   randIntn(5),
+		Language: "en",
+	})
 	tests := []struct {
 		name     string
 		fields   fields
