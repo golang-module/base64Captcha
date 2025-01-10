@@ -51,5 +51,5 @@ func (c *Captcha) Generate() (id, src, answer string, err error) {
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 	value := c.Store.Get(id, clear)
 	// fix issue for some redis key-value string value
-	return strings.TrimSpace(value) == strings.TrimSpace(answer)
+	return strings.EqualFold(strings.TrimSpace(value), strings.TrimSpace(answer))
 }
