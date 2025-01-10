@@ -222,8 +222,28 @@ type DriverDigit struct {
 }
 
 // NewDriverDigit creates a driver of digit
-func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount int) *DriverDigit {
-	return &DriverDigit{Height: height, Width: width, Length: length, MaxSkew: maxSkew, DotCount: dotCount}
+func NewDriverDigit(d DriverDigit) *DriverDigit {
+	return mergeDriverDigit(d)
+}
+
+// mergeDriverAudio merges default driver with given digit driver
+func mergeDriverDigit(d DriverDigit) *DriverDigit {
+	if d.Height == 0 {
+		d.Height = DefaultDriverDigit.Height
+	}
+	if d.Width == 0 {
+		d.Width = DefaultDriverDigit.Width
+	}
+	if d.Length == 0 {
+		d.Length = DefaultDriverDigit.Length
+	}
+	if d.MaxSkew == 0 {
+		d.MaxSkew = DefaultDriverDigit.MaxSkew
+	}
+	if d.DotCount == 0 {
+		d.DotCount = DefaultDriverDigit.DotCount
+	}
+	return &d
 }
 
 // GenerateIdQuestionAnswer creates captcha content and answer
