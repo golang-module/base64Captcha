@@ -1,13 +1,11 @@
 package base64Captcha
 
 import (
-	"github.com/golang-module/base64Captcha/driver"
 	mathRand "math/rand"
 	"reflect"
 	"testing"
 
-	"github.com/golang-module/base64Captcha/driver/audio"
-	"github.com/golang-module/base64Captcha/driver/digit"
+	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/store"
 )
 
@@ -17,8 +15,8 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 		Store  store.Store
 	}
 
-	dDigit := digit.DriverDigit{80, 240, 5, 0.7, 5}
-	audioDriver := audio.NewDriverAudio(randIntn(5), "en")
+	dDigit := driver.DriverDigit{80, 240, 5, 0.7, 5}
+	audioDriver := driver.NewDriverAudio(randIntn(5), "en")
 	tests := []struct {
 		name     string
 		fields   fields
