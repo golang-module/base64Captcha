@@ -1,11 +1,9 @@
-package chinese
+package driver
 
 import (
 	"image/color"
 	"strings"
 
-	"github.com/golang-module/base64Captcha/driver"
-	"github.com/golang-module/base64Captcha/driver/char"
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
@@ -60,21 +58,21 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 
 // GenerateIdQuestionAnswer generates captcha content and its answer
 func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = driver.RandomString()
+	id = RandomString()
 	ss := strings.Split(d.Source, ",")
 	length := len(ss)
 	if length == 1 {
-		c := driver.RandomText(d.Length, ss[0])
+		c := RandomText(d.Length, ss[0])
 		return id, c, c
 	}
 	if length <= d.Length {
-		c := driver.RandomText(d.Length, TxtNumbers+TxtAlphabet)
+		c := RandomText(d.Length, TxtNumbers+TxtAlphabet)
 		return id, c, c
 	}
 
 	res := make([]string, d.Length)
 	for k := range res {
-		res[k] = ss[driver.RandomInt(length)]
+		res[k] = ss[RandomInt(length)]
 	}
 
 	content = strings.Join(res, "")
@@ -82,14 +80,14 @@ func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) 
 }
 
 // DrawCaptcha generates captcha item(image)
-func (d *DriverChinese) DrawCaptcha(content string) (item driver.Item, err error) {
+func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = char.RandColor()
+		bgc = RandColor()
 	}
-	itemChar := char.NewItemChar(d.Width, d.Height, bgc)
+	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
 	// draw hollow line
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
@@ -109,7 +107,7 @@ func (d *DriverChinese) DrawCaptcha(content string) (item driver.Item, err error
 	// draw noise
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
-		noise := driver.RandomText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
+		noise := RandomText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
 		err = itemChar.DrawNoise(noise, d.fontsArray)
 		if err != nil {
 			return
