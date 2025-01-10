@@ -132,26 +132,26 @@ func (m *ItemDigit) drawCircle(x, y, radius int, colorIdx uint8) {
 }
 
 func (m *ItemDigit) fillWithCircles(n, maxradius int) {
-	maxx := m.Bounds().Max.X
-	maxy := m.Bounds().Max.Y
+	maxX := m.Bounds().Max.X
+	maxY := m.Bounds().Max.Y
 	for i := 0; i < n; i++ {
 		// colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
 		colorIdx := uint8(randIntRange(1, m.dotCount-1))
 		// r := m.rng.Int(1, maxradius)
 		r := randIntRange(1, maxradius)
 		// m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
-		m.drawCircle(randIntRange(r, maxx-r), randIntRange(r, maxy-r), r, colorIdx)
+		m.drawCircle(randIntRange(r, maxX-r), randIntRange(r, maxY-r), r, colorIdx)
 	}
 }
 
 func (m *ItemDigit) strikeThrough() {
-	maxx := m.Bounds().Max.X
-	maxy := m.Bounds().Max.Y
-	y := randIntRange(maxy/3, maxy-maxy/3)
+	maxX := m.Bounds().Max.X
+	maxY := m.Bounds().Max.Y
+	y := randIntRange(maxY/3, maxY-maxY/3)
 	amplitude := randFloat64Range(5, 20)
 	period := randFloat64Range(80, 180)
 	dx := 2.0 * math.Pi / period
-	for x := 0; x < maxx; x++ {
+	for x := 0; x < maxX; x++ {
 		xo := amplitude * math.Cos(float64(y)*dx)
 		yo := amplitude * math.Sin(float64(x)*dx)
 		for yn := 0; yn < m.dotSize; yn++ {
@@ -199,12 +199,12 @@ func (m *ItemDigit) distort(amplude float64, period float64) {
 }
 
 func randomBrightness(c color.RGBA, max uint8) color.RGBA {
-	minc := min3(c.R, c.G, c.B)
-	maxc := max3(c.R, c.G, c.B)
-	if maxc > max {
+	minC := min3(c.R, c.G, c.B)
+	maxC := max3(c.R, c.G, c.B)
+	if maxC > max {
 		return c
 	}
-	n := RandomInt(int(max-maxc)) - int(minc)
+	n := RandomInt(int(max-maxC)) - int(minC)
 	return color.RGBA{
 		R: uint8(int(c.R) + n),
 		G: uint8(int(c.G) + n),
