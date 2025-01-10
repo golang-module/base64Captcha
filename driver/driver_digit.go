@@ -226,9 +226,6 @@ func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount
 	return &DriverDigit{Height: height, Width: width, Length: length, MaxSkew: maxSkew, DotCount: dotCount}
 }
 
-// DefaultDriverDigit is a default driver of digit
-var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
-
 // GenerateIdQuestionAnswer creates captcha content and answer
 func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
 	id = RandomString()
