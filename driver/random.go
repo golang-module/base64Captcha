@@ -1,11 +1,12 @@
 package driver
 
 import (
-	"crypto/rand"
 	"image/color"
 	"io"
-	mathRand "math/rand/v2"
 	"strings"
+
+	cryptoRand "crypto/rand"
+	mathRand "math/rand/v2"
 )
 
 const (
@@ -60,7 +61,7 @@ func RandomDigits(length int) []byte {
 // RandomBytes returns a byte slice of the given length read from CSPRNG.
 func RandomBytes(length int) (b []byte) {
 	b = make([]byte, length)
-	if _, err := io.ReadFull(rand.Reader, b); err != nil {
+	if _, err := io.ReadFull(cryptoRand.Reader, b); err != nil {
 		panic("captcha: error reading random source: " + err.Error())
 	}
 	return
