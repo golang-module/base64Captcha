@@ -41,6 +41,18 @@ func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	return &d
 }
 
+// Writer writes captcha character in png format into the given io.Writer, and
+// returns the number of bytes written and an error if any.
+func (item *ItemChar) Writer(w io.Writer) (int64, error) {
+	n, err := w.Write(item.binaryEncoding())
+	return int64(n), err
+}
+
+// Encoder encodes an image to base64 string
+func (item *ItemChar) Encoder() string {
+	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(item.binaryEncoding()))
+}
+
 // drawHollowLine draw strong and bold white line.
 func (item *ItemChar) drawHollowLine() *ItemChar {
 
@@ -286,16 +298,4 @@ func randomColor() color.RGBA {
 		blue = 255
 	}
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
-}
-
-// Writer writes captcha character in png format into the given io.Writer, and
-// returns the number of bytes written and an error if any.
-func (item *ItemChar) Writer(w io.Writer) (int64, error) {
-	n, err := w.Write(item.binaryEncoding())
-	return int64(n), err
-}
-
-// Encoder encodes an image to base64 string
-func (item *ItemChar) Encoder() string {
-	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(item.binaryEncoding()))
 }

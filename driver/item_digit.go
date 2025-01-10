@@ -35,6 +35,18 @@ func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDig
 	return itemDigit
 }
 
+// Writer writes captcha character in png format into the given io.Writer, and
+// returns the number of bytes written and an error if any.
+func (m *ItemDigit) Writer(w io.Writer) (int64, error) {
+	n, err := w.Write(m.encodeBinary())
+	return int64(n), err
+}
+
+// Encoder encodes an image to base64 string
+func (m *ItemDigit) Encoder() string {
+	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(m.encodeBinary()))
+}
+
 func createRandPaletteColors(dotCount int) color.Palette {
 	p := make([]color.Color, dotCount+1)
 	// Transparent color.
@@ -238,18 +250,6 @@ func (m *ItemDigit) encodeBinary() []byte {
 		panic(err.Error())
 	}
 	return buf.Bytes()
-}
-
-// Writer writes captcha character in png format into the given io.Writer, and
-// returns the number of bytes written and an error if any.
-func (m *ItemDigit) Writer(w io.Writer) (int64, error) {
-	n, err := w.Write(m.encodeBinary())
-	return int64(n), err
-}
-
-// Encoder encodes an image to base64 string
-func (m *ItemDigit) Encoder() string {
-	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(m.encodeBinary()))
 }
 
 // converts string to digits
