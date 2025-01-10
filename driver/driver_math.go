@@ -42,42 +42,6 @@ func NewDriverMath(d DriverMath) *DriverMath {
 	return mergeDriverMath(d)
 }
 
-// mergeDriverMath merges default driver with given math driver
-func mergeDriverMath(d DriverMath) *DriverMath {
-	if d.Height == 0 {
-		d.Height = DefaultDriverMath.Height
-	}
-	if d.Width == 0 {
-		d.Width = DefaultDriverMath.Width
-	}
-	if d.ShowLineOptions == 0 {
-		d.ShowLineOptions = DefaultDriverMath.ShowLineOptions
-	}
-	if d.NoiseCount == 0 {
-		d.NoiseCount = DefaultDriverMath.NoiseCount
-	}
-	if len(d.Fonts) == 0 {
-		d.Fonts = DefaultDriverMath.Fonts
-	}
-	if d.BgColor == nil {
-		d.BgColor = DefaultDriverMath.BgColor
-	}
-	if len(d.fontsArray) == 0 {
-		d.fontsArray = DefaultDriverMath.fontsArray
-	}
-	return &d
-}
-
-// ConvertFonts loads fonts from names
-func (d *DriverMath) ConvertFonts() *DriverMath {
-	defaultFont := font.DefaultFont
-	fontsArray := defaultFont.LoadFonts(d.Fonts)
-	if len(fontsArray) == 0 {
-		fontsArray = defaultFont.LoadAll()
-	}
-	return d
-}
-
 // DrawCaptcha creates math captcha item
 func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	var bgc color.RGBA
@@ -146,4 +110,30 @@ func (d *DriverMath) GenerateCaptcha() (id, question, answer string) {
 	}
 	answer = fmt.Sprintf("%d", mathResult)
 	return
+}
+
+// mergeDriverMath merges default driver with given math driver
+func mergeDriverMath(d DriverMath) *DriverMath {
+	if d.Height == 0 {
+		d.Height = DefaultDriverMath.Height
+	}
+	if d.Width == 0 {
+		d.Width = DefaultDriverMath.Width
+	}
+	if d.ShowLineOptions == 0 {
+		d.ShowLineOptions = DefaultDriverMath.ShowLineOptions
+	}
+	if d.NoiseCount == 0 {
+		d.NoiseCount = DefaultDriverMath.NoiseCount
+	}
+	if len(d.Fonts) == 0 {
+		d.Fonts = DefaultDriverMath.Fonts
+	}
+	if d.BgColor == nil {
+		d.BgColor = DefaultDriverMath.BgColor
+	}
+	if len(d.fontsArray) == 0 {
+		d.fontsArray = DefaultDriverMath.fontsArray
+	}
+	return &d
 }

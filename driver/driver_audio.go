@@ -13,17 +13,6 @@ func NewDriverAudio(d DriverAudio) *DriverAudio {
 	return mergeDriverAudio(d)
 }
 
-// mergeDriverAudio merges default driver with given audio driver
-func mergeDriverAudio(d DriverAudio) *DriverAudio {
-	if d.Length == 0 {
-		d.Length = DefaultDriverAudio.Length
-	}
-	if d.Language == "" {
-		d.Language = DefaultDriverAudio.Language
-	}
-	return &d
-}
-
 // DrawCaptcha creates audio captcha item
 func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
 	digits := string2digits(content)
@@ -37,4 +26,15 @@ func (d *DriverAudio) GenerateCaptcha() (id, q, a string) {
 	digits := RandomDigits(d.Length)
 	a = digits2String(digits)
 	return id, a, a
+}
+
+// mergeDriverAudio merges default driver with given audio driver
+func mergeDriverAudio(d DriverAudio) *DriverAudio {
+	if d.Length == 0 {
+		d.Length = DefaultDriverAudio.Length
+	}
+	if d.Language == "" {
+		d.Language = DefaultDriverAudio.Language
+	}
+	return &d
 }
