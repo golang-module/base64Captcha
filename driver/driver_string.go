@@ -53,7 +53,7 @@ func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = randomColor()
+		bgc = RandomColor()
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
