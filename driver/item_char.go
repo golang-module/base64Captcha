@@ -24,7 +24,7 @@ type ItemChar struct {
 	bgColor color.Color
 	width   int
 	height  int
-	nrgba   *image.NRGBA
+	color   *image.NRGBA
 }
 
 // NewItemChar creates a captcha item of characters
@@ -32,7 +32,7 @@ func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	d := ItemChar{width: w, height: h}
 	m := image.NewNRGBA(image.Rect(0, 0, w, h))
 	draw.Draw(m, m.Bounds(), &image.Uniform{C: bgColor}, image.Point{}, draw.Src)
-	d.nrgba = m
+	d.color = m
 	return &d
 }
 
@@ -63,10 +63,10 @@ func (item *ItemChar) DrawHollowLine() *ItemChar {
 		if multiple < 0 {
 			y = y + float64(item.height/2)
 		}
-		item.nrgba.Set(int(x1), int(y), lineColor)
+		item.color.Set(int(x1), int(y), lineColor)
 
 		for i := 0; i <= w; i++ {
-			item.nrgba.Set(int(x1), int(y)+i, lineColor)
+			item.color.Set(int(x1), int(y)+i, lineColor)
 		}
 	}
 
@@ -108,7 +108,7 @@ func (item *ItemChar) DrawSineLine() *ItemChar {
 			py = float64(h)*math.Sin(w*float64(px)+x) + y + (float64(item.width) / float64(5))
 			i := item.height / 5
 			for i > 0 {
-				item.nrgba.Set(px+i, int(py), c)
+				item.color.Set(px+i, int(py), c)
 				i--
 			}
 		}
@@ -157,11 +157,11 @@ func (item *ItemChar) DrawBeeline(point1 point, point2 point, lineColor color.RG
 	}
 	err := dx - dy
 	for {
-		item.nrgba.Set(point1.X, point1.Y, lineColor)
-		item.nrgba.Set(point1.X+1, point1.Y, lineColor)
-		item.nrgba.Set(point1.X-1, point1.Y, lineColor)
-		item.nrgba.Set(point1.X+2, point1.Y, lineColor)
-		item.nrgba.Set(point1.X-2, point1.Y, lineColor)
+		item.color.Set(point1.X, point1.Y, lineColor)
+		item.color.Set(point1.X+1, point1.Y, lineColor)
+		item.color.Set(point1.X-1, point1.Y, lineColor)
+		item.color.Set(point1.X+2, point1.Y, lineColor)
+		item.color.Set(point1.X-2, point1.Y, lineColor)
 		if point1.X == point2.X && point1.Y == point2.Y {
 			return
 		}
@@ -182,8 +182,8 @@ func (item *ItemChar) DrawNoise(noiseText string, fonts []*truetype.Font) error 
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
-	c.SetClip(item.nrgba.Bounds())
-	c.SetDst(item.nrgba)
+	c.SetClip(item.color.Bounds())
+	c.SetDst(item.color)
 	c.SetHinting(imageFont.HintingFull)
 	rawFontSize := float64(item.height) / (1 + float64(RandomInt(7))/float64(10))
 
@@ -207,8 +207,8 @@ func (item *ItemChar) DrawNoise(noiseText string, fonts []*truetype.Font) error 
 func (item *ItemChar) DrawText(text string, fonts []*truetype.Font) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
-	c.SetClip(item.nrgba.Bounds())
-	c.SetDst(item.nrgba)
+	c.SetClip(item.color.Bounds())
+	c.SetDst(item.color)
 	c.SetHinting(imageFont.HintingFull)
 
 	if len(text) == 0 {
@@ -235,7 +235,7 @@ func (item *ItemChar) DrawText(text string, fonts []*truetype.Font) error {
 // BinaryEncoding encodes an image to PNG and returns a byte slice.
 func (item *ItemChar) BinaryEncoding() []byte {
 	var buf bytes.Buffer
-	if err := png.Encode(&buf, item.nrgba); err != nil {
+	if err := png.Encode(&buf, item.color); err != nil {
 		panic(err.Error())
 	}
 	return buf.Bytes()
