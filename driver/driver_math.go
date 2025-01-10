@@ -84,19 +84,19 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = RandColor()
+		bgc = randomColor()
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
 	// 波浪线 比较丑
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
-		itemChar.DrawHollowLine()
+		itemChar.drawHollowLine()
 	}
 
 	// 背景有文字干扰
 	if d.NoiseCount > 0 {
 		noise := RandomText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
-		err = itemChar.DrawNoise(noise, font.DefaultFont.LoadAll())
+		err = itemChar.drawNoise(noise, font.DefaultFont.LoadAll())
 		if err != nil {
 			return
 		}
@@ -104,16 +104,16 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 
 	// 画 细直线 (n 条)
 	if d.ShowLineOptions&OptionShowSlimeLine == OptionShowSlimeLine {
-		itemChar.DrawSlimLine(3)
+		itemChar.drawSlimLine(3)
 	}
 
 	// 画 多个小波浪线
 	if d.ShowLineOptions&OptionShowSineLine == OptionShowSineLine {
-		itemChar.DrawSineLine()
+		itemChar.drawSineLine()
 	}
 
 	// draw question
-	err = itemChar.DrawText(question, d.fontsArray)
+	err = itemChar.drawText(question, d.fontsArray)
 	if err != nil {
 		return
 	}
