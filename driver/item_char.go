@@ -5,15 +5,13 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"io"
-	"log"
-	"math"
-	"math/rand/v2"
-
 	"image"
 	"image/color"
 	"image/draw"
 	"image/png"
+	"io"
+	"log"
+	"math"
 
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype"
@@ -83,25 +81,25 @@ func (item *ItemChar) DrawSineLine() *ItemChar {
 	h := RandomInt(item.height / 2)
 
 	// X 轴方向偏移量
-	x := random(int64(-item.height/4), int64(item.height/4))
+	x := RandomRange(float64(-item.height/4), float64(item.height/4))
 
 	// Y 轴方向偏移量
-	y := random(int64(-item.height/4), int64(item.height/4))
+	y := RandomRange(float64(-item.height/4), float64(item.height/4))
 
 	// 周期
 	var t float64
 	if item.height > item.width/2 {
-		t = random(int64(item.width/2), int64(item.height))
+		t = RandomRange(float64(item.width/2), float64(item.height))
 	} else if item.height == item.width/2 {
 		t = float64(item.height)
 	} else {
-		t = random(int64(item.height), int64(item.width/2))
+		t = RandomRange(float64(item.height), float64(item.width/2))
 	}
 	w := (2 * math.Pi) / t
 
 	// 曲线横坐标起始位置
 	px1 := 0
-	px2 := int(random(int64(float64(item.width)*0.8), int64(item.width)))
+	px2 := int(RandomRange(float64(item.width)*0.8, float64(item.width)))
 
 	c := RandDeepColor()
 
@@ -146,6 +144,7 @@ func (item *ItemChar) DrawSlimLine(num int) *ItemChar {
 	return item
 }
 
+// DrawBeeline draw a beeline.
 func (item *ItemChar) DrawBeeline(point1 point, point2 point, lineColor color.RGBA) {
 	dx := math.Abs(float64(point1.X - point2.X))
 	dy := math.Abs(float64(point2.Y - point1.Y))
@@ -178,6 +177,7 @@ func (item *ItemChar) DrawBeeline(point1 point, point2 point, lineColor color.RG
 	}
 }
 
+// DrawNoise draw noise text.
 func (item *ItemChar) DrawNoise(noiseText string, fonts []*truetype.Font) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
@@ -193,7 +193,7 @@ func (item *ItemChar) DrawNoise(noiseText string, fonts []*truetype.Font) error 
 		fontSize := rawFontSize/2 + float64(RandomInt(5))
 		c.SetSrc(image.NewUniform(RandomColor()))
 		c.SetFontSize(fontSize)
-		c.SetFont(randFontFrom(fonts))
+		c.SetFont(RandomFont(fonts))
 		pt := freetype.Pt(rw, rh)
 		if _, err := c.DrawString(string(char), pt); err != nil {
 			log.Println(err)
@@ -221,7 +221,7 @@ func (item *ItemChar) DrawText(text string, fonts []*truetype.Font) error {
 		fontSize := item.height * (RandomInt(7) + 7) / 16
 		c.SetSrc(image.NewUniform(RandDeepColor()))
 		c.SetFontSize(float64(fontSize))
-		c.SetFont(randFontFrom(fonts))
+		c.SetFont(RandomFont(fonts))
 		x := fontWidth*i + fontWidth/fontSize
 		y := item.height/2 + fontSize/2 - RandomInt(item.height/16*3)
 		pt := freetype.Pt(x, y)
@@ -258,20 +258,15 @@ type point struct {
 	Y int
 }
 
-func randFontFrom(fonts []*truetype.Font) *truetype.Font {
-	fontCount := len(fonts)
-
-	if fontCount == 0 {
+// RandomFont get random font.
+func RandomFont(fonts []*truetype.Font) *truetype.Font {
+	n := len(fonts)
+	if n == 0 {
 		// loading default fonts
 		fonts = font.DefaultSource.LoadAll()
-		fontCount = len(fonts)
+		n = len(fonts)
 	}
-	index := RandomInt(fontCount)
-	return fonts[index]
-}
-
-func random(min int64, max int64) float64 {
-	return float64(min) + rand.Float64()*float64(max-min)
+	return fonts[RandomInt(n)]
 }
 
 // RandDeepColor get random deep color. 随机生成深色系.
