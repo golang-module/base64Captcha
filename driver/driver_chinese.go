@@ -36,13 +36,45 @@ type DriverChinese struct {
 }
 
 // NewDriverChinese creates a driver of Chinese characters
-func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverChinese {
+func NewDriverChinese(d DriverChinese) *DriverChinese {
 	defaultFont := font.DefaultFont
-	fontsArray := defaultFont.LoadFonts(fonts)
+	fontsArray := defaultFont.LoadFonts(d.Fonts)
 	if len(fontsArray) == 0 {
-		fontsArray = defaultFont.LoadAll()
+		d.fontsArray = defaultFont.LoadAll()
 	}
-	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: fontsArray}
+	return mergeDriverChinese(d)
+}
+
+// mergeDriverChinese merges default driver with given chinese driver
+func mergeDriverChinese(d DriverChinese) *DriverChinese {
+	if d.Height == 0 {
+		d.Height = DefaultDriverString.Height
+	}
+	if d.Width == 0 {
+		d.Width = DefaultDriverString.Width
+	}
+	if d.ShowLineOptions == 0 {
+		d.ShowLineOptions = DefaultDriverString.ShowLineOptions
+	}
+	if d.NoiseCount == 0 {
+		d.NoiseCount = DefaultDriverString.NoiseCount
+	}
+	if d.Length == 0 {
+		d.Length = DefaultDriverString.Length
+	}
+	if d.Source == "" {
+		d.Source = DefaultDriverString.Source
+	}
+	if len(d.Fonts) == 0 {
+		d.Fonts = DefaultDriverString.Fonts
+	}
+	if d.BgColor == nil {
+		d.BgColor = DefaultDriverString.BgColor
+	}
+	if len(d.fontsArray) == 0 {
+		d.fontsArray = DefaultDriverString.fontsArray
+	}
+	return &d
 }
 
 // ConvertFonts loads fonts by names
