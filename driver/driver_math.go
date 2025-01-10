@@ -33,13 +33,39 @@ type DriverMath struct {
 }
 
 // NewDriverMath creates a driver of math
-func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, bgColor *color.RGBA, fonts []string) *DriverMath {
+func NewDriverMath(d DriverMath) *DriverMath {
 	defaultFont := font.DefaultFont
-	fontsArray := defaultFont.LoadFonts(fonts)
+	fontsArray := defaultFont.LoadFonts(d.Fonts)
 	if len(fontsArray) == 0 {
-		fontsArray = defaultFont.LoadAll()
+		d.fontsArray = defaultFont.LoadAll()
 	}
-	return &DriverMath{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, fontsArray: fontsArray, BgColor: bgColor, Fonts: fonts}
+	return mergeDriverMath(d)
+}
+
+// mergeDriverMath merge default config
+func mergeDriverMath(d DriverMath) *DriverMath {
+	if d.Height == 0 {
+		d.Height = DefaultDriverMath.Height
+	}
+	if d.Width == 0 {
+		d.Width = DefaultDriverMath.Width
+	}
+	if d.ShowLineOptions == 0 {
+		d.ShowLineOptions = DefaultDriverMath.ShowLineOptions
+	}
+	if d.NoiseCount == 0 {
+		d.NoiseCount = DefaultDriverMath.NoiseCount
+	}
+	if len(d.Fonts) == 0 {
+		d.Fonts = DefaultDriverMath.Fonts
+	}
+	if d.BgColor == nil {
+		d.BgColor = DefaultDriverMath.BgColor
+	}
+	if len(d.fontsArray) == 0 {
+		d.fontsArray = DefaultDriverMath.fontsArray
+	}
+	return &d
 }
 
 // ConvertFonts loads fonts from names
