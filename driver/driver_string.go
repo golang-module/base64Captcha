@@ -89,13 +89,6 @@ func (d *DriverString) ConvertFonts() *DriverString {
 	return d
 }
 
-// GenerateCaptcha creates id,content and answer
-func (d *DriverString) GenerateCaptcha() (id, content, answer string) {
-	id = RandomString()
-	content = RandomText(d.Length, d.Source)
-	return id, content, content
-}
-
 // DrawCaptcha draws captcha item
 func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 
@@ -139,4 +132,11 @@ func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 	}
 
 	return itemChar, nil
+}
+
+// GenerateCaptcha creates id,content and answer
+func (d *DriverString) GenerateCaptcha() (id, content, answer string) {
+	id = RandomString()
+	content = RandomText(d.Length, d.Source)
+	return id, content, content
 }
