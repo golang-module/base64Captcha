@@ -38,20 +38,20 @@ type DriverString struct {
 
 // NewDriverString creates driver
 func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverString {
-	defaultSource := font.DefaultSource
-	fontsArray := defaultSource.LoadFonts(fonts)
+	defaultFont := font.DefaultFont
+	fontsArray := defaultFont.LoadFonts(fonts)
 	if len(fontsArray) == 0 {
-		fontsArray = defaultSource.LoadAll()
+		fontsArray = defaultFont.LoadAll()
 	}
 	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: fontsArray, Fonts: fonts}
 }
 
 // ConvertFonts loads fonts by names
 func (d *DriverString) ConvertFonts() *DriverString {
-	defaultSource := font.DefaultSource
-	fontsArray := defaultSource.LoadFonts(d.Fonts)
+	defaultFont := font.DefaultFont
+	fontsArray := defaultFont.LoadFonts(d.Fonts)
 	if len(fontsArray) == 0 {
-		fontsArray = defaultSource.LoadAll()
+		fontsArray = defaultFont.LoadAll()
 	}
 	d.fontsArray = fontsArray
 	return d

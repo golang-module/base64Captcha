@@ -100,12 +100,12 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 		itemChar.DrawSineLine()
 	}
 
-	defaultSource := font.DefaultSource
+	defaultFont := font.DefaultFont
 
 	// draw noise
 	if d.NoiseCount > 0 {
 		noise := RandomText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
-		err = itemChar.DrawNoise(noise, defaultSource.LoadAll())
+		err = itemChar.DrawNoise(noise, defaultFont.LoadAll())
 		if err != nil {
 			return
 		}
@@ -113,7 +113,7 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 
 	// draw content
 	// use font that match your language
-	fontChinese := defaultSource.LoadChinese()
+	fontChinese := defaultFont.LoadChinese()
 	err = itemChar.DrawText(content, []*truetype.Font{fontChinese})
 	if err != nil {
 		return
