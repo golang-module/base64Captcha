@@ -263,7 +263,7 @@ func RandomFont(fonts []*truetype.Font) *truetype.Font {
 	n := len(fonts)
 	if n == 0 {
 		// loading default fonts
-		fonts = font.DefaultSource.LoadAll()
+		fonts = font.DefaultFont.LoadAll()
 		n = len(fonts)
 	}
 	return fonts[RandomInt(n)]

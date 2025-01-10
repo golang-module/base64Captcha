@@ -34,20 +34,20 @@ type DriverMath struct {
 
 // NewDriverMath creates a driver of math
 func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, bgColor *color.RGBA, fonts []string) *DriverMath {
-	defaultSource := font.DefaultSource
-	fontsArray := defaultSource.LoadFonts(fonts)
+	defaultFont := font.DefaultFont
+	fontsArray := defaultFont.LoadFonts(fonts)
 	if len(fontsArray) == 0 {
-		fontsArray = defaultSource.LoadAll()
+		fontsArray = defaultFont.LoadAll()
 	}
 	return &DriverMath{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, fontsArray: fontsArray, BgColor: bgColor, Fonts: fonts}
 }
 
 // ConvertFonts loads fonts from names
 func (d *DriverMath) ConvertFonts() *DriverMath {
-	defaultSource := font.DefaultSource
-	fontsArray := defaultSource.LoadFonts(d.Fonts)
+	defaultFont := font.DefaultFont
+	fontsArray := defaultFont.LoadFonts(d.Fonts)
 	if len(fontsArray) == 0 {
-		fontsArray = defaultSource.LoadAll()
+		fontsArray = defaultFont.LoadAll()
 	}
 	return d
 }
@@ -98,7 +98,7 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	// 背景有文字干扰
 	if d.NoiseCount > 0 {
 		noise := RandomText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
-		err = itemChar.DrawNoise(noise, font.DefaultSource.LoadAll())
+		err = itemChar.DrawNoise(noise, font.DefaultFont.LoadAll())
 		if err != nil {
 			return
 		}

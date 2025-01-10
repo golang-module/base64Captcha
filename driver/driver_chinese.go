@@ -37,20 +37,20 @@ type DriverChinese struct {
 
 // NewDriverChinese creates a driver of Chinese characters
 func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverChinese {
-	defaultSource := font.DefaultSource
-	fontsArray := defaultSource.LoadFonts(fonts)
+	defaultFont := font.DefaultFont
+	fontsArray := defaultFont.LoadFonts(fonts)
 	if len(fontsArray) == 0 {
-		fontsArray = defaultSource.LoadAll()
+		fontsArray = defaultFont.LoadAll()
 	}
 	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: fontsArray}
 }
 
 // ConvertFonts loads fonts by names
 func (d *DriverChinese) ConvertFonts() *DriverChinese {
-	defaultSource := font.DefaultSource
-	fontsArray := defaultSource.LoadFonts(d.Fonts)
+	defaultFont := font.DefaultFont
+	fontsArray := defaultFont.LoadFonts(d.Fonts)
 	if len(fontsArray) == 0 {
-		fontsArray = defaultSource.LoadAll()
+		fontsArray = defaultFont.LoadAll()
 	}
 	d.fontsArray = fontsArray
 	return d
