@@ -25,7 +25,6 @@ type ItemDigit struct {
 	dotSize  int
 	dotCount int
 	maxSkew  float64
-	// rng      siprng
 }
 
 // NewItemDigit create an instance of item-digit
@@ -184,18 +183,18 @@ func (m *ItemDigit) distort(amplude float64, period float64) {
 	w := m.Bounds().Max.X
 	h := m.Bounds().Max.Y
 
-	oldm := m.Paletted
-	newm := image.NewPaletted(image.Rect(0, 0, w, h), oldm.Palette)
+	oldItem := m.Paletted
+	newItem := image.NewPaletted(image.Rect(0, 0, w, h), oldItem.Palette)
 
 	dx := 2.0 * math.Pi / period
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
 			xo := amplude * math.Sin(float64(y)*dx)
 			yo := amplude * math.Cos(float64(x)*dx)
-			newm.SetColorIndex(x, y, oldm.ColorIndexAt(x+int(xo), y+int(yo)))
+			newItem.SetColorIndex(x, y, oldItem.ColorIndexAt(x+int(xo), y+int(yo)))
 		}
 	}
-	m.Paletted = newm
+	m.Paletted = newItem
 }
 
 func randomBrightness(c color.RGBA, max uint8) color.RGBA {
@@ -256,7 +255,7 @@ func (m *ItemDigit) EncodeB64string() string {
 	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(m.EncodeBinary()))
 }
 
-// string2digits converts string to digits
+// converts string to digits
 func string2digits(content string) []byte {
 	digits := make([]byte, len(content))
 	for idx, cc := range content {
@@ -265,7 +264,7 @@ func string2digits(content string) []byte {
 	return digits
 }
 
-// digits2String converts digits to string
+// converts digits to string
 func digits2String(bytes []byte) string {
 	stringB := make([]byte, len(bytes))
 	for idx, by := range bytes {
