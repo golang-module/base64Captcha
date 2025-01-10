@@ -46,7 +46,7 @@ func NewDriverString(d DriverString) *DriverString {
 	return mergeDriverString(d)
 }
 
-// mergeDriverMath merge default config
+// mergeDriverString merges default driver with given string driver
 func mergeDriverString(d DriverString) *DriverString {
 	if d.Height == 0 {
 		d.Height = DefaultDriverString.Height
