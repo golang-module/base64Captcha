@@ -31,8 +31,8 @@ func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
 	return audio, nil
 }
 
-// GenerateIdQuestionAnswer creates id,captcha content and answer
-func (d *DriverAudio) GenerateIdQuestionAnswer() (id, q, a string) {
+// GenerateCaptcha creates id,captcha content and answer
+func (d *DriverAudio) GenerateCaptcha() (id, q, a string) {
 	id = RandomString()
 	digits := RandomDigits(d.Length)
 	a = digits2String(digits)

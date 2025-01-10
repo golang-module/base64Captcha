@@ -246,17 +246,9 @@ func mergeDriverDigit(d DriverDigit) *DriverDigit {
 	return &d
 }
 
-// GenerateIdQuestionAnswer creates captcha content and answer
-func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
+// GenerateCaptcha creates captcha content and answer
+func (d *DriverDigit) GenerateCaptcha() (id, q, a string) {
 	id = RandomString()
-	digits := RandomDigits(d.Length)
-	a = digits2String(digits)
-	return id, a, a
-}
-
-// GenerateSpecificIdQuestionAnswer creates captcha content and answer
-func (d *DriverDigit) GenerateSpecificIdQuestionAnswer(mId string) (id, q, a string) {
-	id = mId
 	digits := RandomDigits(d.Length)
 	a = digits2String(digits)
 	return id, a, a
