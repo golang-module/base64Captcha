@@ -1,13 +1,11 @@
-package math
+package driver
 
 import (
 	"fmt"
-	"github.com/golang-module/base64Captcha/driver/char"
 	"image/color"
 	"math/rand"
 	"strings"
 
-	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
@@ -56,7 +54,7 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 
 // GenerateIdQuestionAnswer creates id,captcha content and answer
 func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
-	id = driver.RandomString()
+	id = RandomString()
 	operators := []string{"+", "-", "x"}
 	var mathResult int32
 	switch operators[rand.Int31n(3)] {
@@ -83,14 +81,14 @@ func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
 }
 
 // DrawCaptcha creates math captcha item
-func (d *DriverMath) DrawCaptcha(question string) (item driver.Item, err error) {
+func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = char.RandColor()
+		bgc = RandColor()
 	}
-	itemChar := char.NewItemChar(d.Width, d.Height, bgc)
+	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
 	// 波浪线 比较丑
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
@@ -99,7 +97,7 @@ func (d *DriverMath) DrawCaptcha(question string) (item driver.Item, err error) 
 
 	// 背景有文字干扰
 	if d.NoiseCount > 0 {
-		noise := driver.RandomText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
+		noise := RandomText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
 		err = itemChar.DrawNoise(noise, font.DefaultSource.LoadAll())
 		if err != nil {
 			return

@@ -1,11 +1,9 @@
-package string
+package driver
 
 import (
-	"github.com/golang-module/base64Captcha/driver/char"
 	"image/color"
 	"strings"
 
-	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/font"
 	"github.com/golang/freetype/truetype"
 )
@@ -61,21 +59,21 @@ func (d *DriverString) ConvertFonts() *DriverString {
 
 // GenerateIdQuestionAnswer creates id,content and answer
 func (d *DriverString) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = driver.RandomString()
-	content = driver.RandomText(d.Length, d.Source)
+	id = RandomString()
+	content = RandomText(d.Length, d.Source)
 	return id, content, content
 }
 
 // DrawCaptcha draws captcha item
-func (d *DriverString) DrawCaptcha(content string) (item driver.Item, err error) {
+func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = char.RandColor()
+		bgc = RandColor()
 	}
-	itemChar := char.NewItemChar(d.Width, d.Height, bgc)
+	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
 	// draw hollow line
 	if d.ShowLineOptions&OptionShowHollowLine == OptionShowHollowLine {
@@ -95,7 +93,7 @@ func (d *DriverString) DrawCaptcha(content string) (item driver.Item, err error)
 	// draw noise
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
-		noise := driver.RandomText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
+		noise := RandomText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
 		err = itemChar.DrawNoise(noise, d.fontsArray)
 		if err != nil {
 			return

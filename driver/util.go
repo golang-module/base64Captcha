@@ -1,11 +1,9 @@
-package audio
+package driver
 
 import (
 	"encoding/binary"
 	"math"
 	mathRand "math/rand"
-
-	"github.com/golang-module/base64Captcha/driver"
 )
 
 func setSoundLevel(a []byte, level float64) {
@@ -93,7 +91,7 @@ func randIntRange(from, to int) int {
 	if to-from <= 0 {
 		return from
 	}
-	return driver.RandomInt(to-from) + from
+	return RandomInt(to-from) + from
 }
 
 func randBytes(n int) []byte {
