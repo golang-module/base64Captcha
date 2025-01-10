@@ -272,7 +272,7 @@ func randomFont(fonts []*truetype.Font) *truetype.Font {
 // randomDeepColor get random deep color. 随机生成深色系.
 func randomDeepColor() color.RGBA {
 
-	randColor := randomColor()
+	randColor := RandomColor()
 
 	increase := float64(30 + RandomInt(255))
 
@@ -281,21 +281,5 @@ func randomDeepColor() color.RGBA {
 	green := math.Abs(math.Min(float64(randColor.G)-increase, 255))
 	blue := math.Abs(math.Min(float64(randColor.B)-increase, 255))
 
-	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
-}
-
-// randomColor get random color. 生成随机颜色.
-func randomColor() color.RGBA {
-	red := RandomInt(255)
-	green := RandomInt(255)
-	var blue int
-	if (red + green) > 400 {
-		blue = 0
-	} else {
-		blue = 400 - green - red
-	}
-	if blue > 255 {
-		blue = 255
-	}
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
