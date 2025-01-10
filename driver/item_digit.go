@@ -28,7 +28,7 @@ type ItemDigit struct {
 	// rng      siprng
 }
 
-// NewItemDigit create a instance of item-digit
+// NewItemDigit create an instance of item-digit
 func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDigit {
 	itemDigit := &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
 	// init image.Paletted
@@ -39,13 +39,13 @@ func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDig
 func createRandPaletteColors(dotCount int) color.Palette {
 	p := make([]color.Color, dotCount+1)
 	// Transparent color.
-	p[0] = color.RGBA{0xFF, 0xFF, 0xFF, 0x00}
+	p[0] = color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF}
 	// Primary color.
 	prim := color.RGBA{
-		uint8(RandomInt(129)),
-		uint8(RandomInt(129)),
-		uint8(RandomInt(129)),
-		0xFF,
+		R: uint8(RandomInt(129)),
+		G: uint8(RandomInt(129)),
+		B: uint8(RandomInt(129)),
+		A: 0xFF,
 	}
 
 	if dotCount == 0 {
@@ -206,10 +206,10 @@ func randomBrightness(c color.RGBA, max uint8) color.RGBA {
 	}
 	n := RandomInt(int(max-maxc)) - int(minc)
 	return color.RGBA{
-		uint8(int(c.R) + n),
-		uint8(int(c.G) + n),
-		uint8(int(c.B) + n),
-		c.A,
+		R: uint8(int(c.R) + n),
+		G: uint8(int(c.G) + n),
+		B: uint8(int(c.B) + n),
+		A: c.A,
 	}
 }
 
