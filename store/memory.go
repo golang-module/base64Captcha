@@ -2,6 +2,7 @@ package store
 
 import (
 	"container/list"
+	"strings"
 	"sync"
 	"time"
 )
@@ -53,7 +54,7 @@ func (s *storeMemory) Verify(id, answer string, clear bool) bool {
 		return false
 	}
 	v := s.Get(id, clear)
-	return v != "" && v == answer
+	return strings.EqualFold(v, answer)
 }
 
 func (s *storeMemory) Get(id string, clear bool) string {
