@@ -1,6 +1,8 @@
 package driver
 
-import "io"
+import (
+	"io"
+)
 
 // Item is captcha item interface
 type Item interface {
