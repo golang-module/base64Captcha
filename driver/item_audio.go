@@ -77,16 +77,6 @@ func newAudio(digits []byte, lang string) *ItemAudio {
 	return a
 }
 
-func (a *ItemAudio) longestDigitSndLen() int {
-	n := 0
-	for _, v := range a.digitSounds {
-		if n < len(v) {
-			n = len(v)
-		}
-	}
-	return n
-}
-
 // Writer writes captcha audio in WAVE format into the given io.Writer, and
 // returns the number of bytes written and an error if any.
 func (a *ItemAudio) Writer(w io.Writer) (n int64, err error) {
@@ -132,6 +122,17 @@ func (a *ItemAudio) Encoder() string {
 		panic(err.Error())
 	}
 	return fmt.Sprintf("data:%s;base64,%s", MimeTypeAudio, base64.StdEncoding.EncodeToString(buf.Bytes()))
+}
+
+// longestDigitSndLen returns the length of the longest digit sound.
+func (a *ItemAudio) longestDigitSndLen() int {
+	n := 0
+	for _, v := range a.digitSounds {
+		if n < len(v) {
+			n = len(v)
+		}
+	}
+	return n
 }
 
 // setSoundLevel sets the level of the sound.
