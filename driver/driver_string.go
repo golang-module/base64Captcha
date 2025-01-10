@@ -89,8 +89,8 @@ func (d *DriverString) ConvertFonts() *DriverString {
 	return d
 }
 
-// GenerateIdQuestionAnswer creates id,content and answer
-func (d *DriverString) GenerateIdQuestionAnswer() (id, content, answer string) {
+// GenerateCaptcha creates id,content and answer
+func (d *DriverString) GenerateCaptcha() (id, content, answer string) {
 	id = RandomString()
 	content = RandomText(d.Length, d.Source)
 	return id, content, content

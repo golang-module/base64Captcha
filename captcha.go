@@ -31,7 +31,7 @@ func NewCaptcha(d driver.Driver, s ...store.Store) *Captcha {
 
 // Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, src, answer string, err error) {
-	id, content, answer := c.Driver.GenerateIdQuestionAnswer()
+	id, content, answer := c.Driver.GenerateCaptcha()
 	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return

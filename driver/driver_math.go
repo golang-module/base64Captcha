@@ -78,8 +78,8 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 	return d
 }
 
-// GenerateIdQuestionAnswer creates id,captcha content and answer
-func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
+// GenerateCaptcha creates id,captcha content and answer
+func (d *DriverMath) GenerateCaptcha() (id, question, answer string) {
 	id = RandomString()
 	operators := []string{"+", "-", "x"}
 	var mathResult int32
