@@ -23,26 +23,6 @@ func NewDriverDigit(d DriverDigit) *DriverDigit {
 	return mergeDriverDigit(d)
 }
 
-// mergeDriverAudio merges default driver with given digit driver
-func mergeDriverDigit(d DriverDigit) *DriverDigit {
-	if d.Height == 0 {
-		d.Height = DefaultDriverDigit.Height
-	}
-	if d.Width == 0 {
-		d.Width = DefaultDriverDigit.Width
-	}
-	if d.Length == 0 {
-		d.Length = DefaultDriverDigit.Length
-	}
-	if d.MaxSkew == 0 {
-		d.MaxSkew = DefaultDriverDigit.MaxSkew
-	}
-	if d.DotCount == 0 {
-		d.DotCount = DefaultDriverDigit.DotCount
-	}
-	return &d
-}
-
 // DrawCaptcha creates digit captcha item
 func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Initialize PRNG.
@@ -82,4 +62,24 @@ func (d *DriverDigit) GenerateCaptcha() (id, q, a string) {
 	digits := RandomDigits(d.Length)
 	a = digits2String(digits)
 	return id, a, a
+}
+
+// mergeDriverAudio merges default driver with given digit driver
+func mergeDriverDigit(d DriverDigit) *DriverDigit {
+	if d.Height == 0 {
+		d.Height = DefaultDriverDigit.Height
+	}
+	if d.Width == 0 {
+		d.Width = DefaultDriverDigit.Width
+	}
+	if d.Length == 0 {
+		d.Length = DefaultDriverDigit.Length
+	}
+	if d.MaxSkew == 0 {
+		d.MaxSkew = DefaultDriverDigit.MaxSkew
+	}
+	if d.DotCount == 0 {
+		d.DotCount = DefaultDriverDigit.DotCount
+	}
+	return &d
 }
