@@ -1,6 +1,7 @@
 package store
 
 import (
+	"strings"
 	"sync"
 	"time"
 )
@@ -43,7 +44,8 @@ func (s storeSyncMap) Get(id string, clear bool) string {
 
 // Verify check a string value
 func (s storeSyncMap) Verify(id, answer string, clear bool) bool {
-	return s.Get(id, clear) == answer
+	vv := s.Get(id, clear)
+	return strings.EqualFold(vv, answer)
 }
 
 // delete remove expired items
