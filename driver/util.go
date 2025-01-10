@@ -3,7 +3,7 @@ package driver
 import (
 	"encoding/binary"
 	"math"
-	mathRand "math/rand"
+	"math/rand/v2"
 )
 
 func setSoundLevel(a []byte, level float64) {
@@ -84,7 +84,7 @@ func reversedSound(a []byte) []byte {
 }
 
 func randFloat64Range(from, to float64) float64 {
-	return mathRand.Float64()*(to-from) + from
+	return rand.Float64()*(to-from) + from
 }
 
 func randIntRange(from, to int) int {
@@ -105,7 +105,7 @@ func randBytes(n int) []byte {
 	numBlocks := (n + 8 - 1) / 8
 	b := make([]byte, numBlocks*8)
 	for i := 0; i < len(b); i += 8 {
-		binary.LittleEndian.PutUint64(b[i:], mathRand.Uint64())
+		binary.LittleEndian.PutUint64(b[i:], rand.Uint64())
 	}
 	return b[:n]
 }

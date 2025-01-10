@@ -4,7 +4,7 @@ import (
 	"crypto/rand"
 	"image/color"
 	"io"
-	mathRand "math/rand"
+	mathRand "math/rand/v2"
 	"strings"
 )
 
@@ -16,7 +16,7 @@ const (
 
 func RandomInt(n int) int {
 	if n > 0 {
-		return mathRand.Intn(n)
+		return mathRand.IntN(n)
 	}
 	return 0
 }

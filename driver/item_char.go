@@ -8,7 +8,7 @@ import (
 	"io"
 	"log"
 	"math"
-	mathRand "math/rand"
+	"math/rand/v2"
 
 	"image"
 	"image/color"
@@ -271,7 +271,7 @@ func randFontFrom(fonts []*truetype.Font) *truetype.Font {
 }
 
 func random(min int64, max int64) float64 {
-	return float64(min) + mathRand.Float64()*float64(max-min)
+	return float64(min) + rand.Float64()*float64(max-min)
 }
 
 // RandDeepColor get random deep color. 随机生成深色系.
