@@ -108,12 +108,12 @@ func RandomRange[T int | float64](from, to T) T {
 	if to-from <= 0 {
 		return from
 	}
-	var result T
+	var t T
 	switch any(from).(type) {
 	case int:
-		result = T(mathRand.IntN(int(to-from))) + from
+		t = T(mathRand.IntN(int(to-from))) + from
 	case float64:
-		result = T(mathRand.Float64()*float64(to-from)) + from
+		t = T(mathRand.Float64()*float64(to-from)) + from
 	}
-	return result
+	return t
 }
