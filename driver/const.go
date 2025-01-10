@@ -7,8 +7,6 @@ const (
 	// MimeTypeAudio output base64 mine-type.
 	MimeTypeAudio = "audio/wav"
 
-	sampleRate = 8000 // Hz
-	
 	imageStringDpi = 72.0
 
 	// OptionShowHollowLine shows hollow line
@@ -18,9 +16,3 @@ const (
 	// OptionShowSineLine shows sine line
 	OptionShowSineLine = 8
 )
-
-var endingBeepSound []byte
-
-func init() {
-	endingBeepSound = changeSpeed(beepSound, 1.4)
-}
