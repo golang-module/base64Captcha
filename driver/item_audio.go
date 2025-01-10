@@ -87,9 +87,9 @@ func (a *ItemAudio) longestDigitSndLen() int {
 	return n
 }
 
-// WriteTo writes captcha audio in WAVE format into the given io.Writer, and
+// Writer writes captcha audio in WAVE format into the given io.Writer, and
 // returns the number of bytes written and an error if any.
-func (a *ItemAudio) WriteTo(w io.Writer) (n int64, err error) {
+func (a *ItemAudio) Writer(w io.Writer) (n int64, err error) {
 	// Calculate padded length of PCM chunk data.
 	bodyLen := uint32(a.body.Len())
 	paddedBodyLen := bodyLen
@@ -125,10 +125,10 @@ func (a *ItemAudio) WriteTo(w io.Writer) (n int64, err error) {
 	return
 }
 
-// EncodeB64string encodes a sound to base64 string
-func (a *ItemAudio) EncodeB64string() string {
+// Encoder encodes a sound to base64 string
+func (a *ItemAudio) Encoder() string {
 	var buf bytes.Buffer
-	if _, err := a.WriteTo(&buf); err != nil {
+	if _, err := a.Writer(&buf); err != nil {
 		panic(err.Error())
 	}
 	return fmt.Sprintf("data:%s;base64,%s", MimeTypeAudio, base64.StdEncoding.EncodeToString(buf.Bytes()))
