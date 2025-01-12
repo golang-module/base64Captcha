@@ -7,6 +7,7 @@ package base64Captcha
 import (
 	"strings"
 
+	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/store"
 )
 
@@ -15,28 +16,22 @@ const Version = "1.3.8"
 
 // Captcha basic information.
 type Captcha struct {
-	Driver Driver
+	Driver driver.Driver
 	Store  store.Store
 }
 
 // NewCaptcha creates a captcha instance from driver and store
-func NewCaptcha(d Driver, s ...store.Store) *Captcha {
+func NewCaptcha(d driver.Driver, s ...store.Store) *Captcha {
 	if len(s) == 0 {
 		s = make([]store.Store, 1)
-		s[0] = store.DefaultMemoryStore
+		s[0] = store.DefaultStoreMemory
 	}
 	return &Captcha{Driver: d, Store: s[0]}
 }
 
-// SetStore sets captcha store
-func (c *Captcha) SetStore(s store.Store) *Captcha {
-	c.Store = s
-	return c
-}
-
 // Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, src, answer string, err error) {
-	id, content, answer := c.Driver.GenerateIdQuestionAnswer()
+	id, content, answer := c.Driver.GenerateCaptcha()
 	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return
@@ -45,7 +40,7 @@ func (c *Captcha) Generate() (id, src, answer string, err error) {
 	if err != nil {
 		return
 	}
-	src = item.EncodeB64string()
+	src = item.Encoder()
 	return
 }
 
@@ -56,5 +51,5 @@ func (c *Captcha) Generate() (id, src, answer string, err error) {
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 	value := c.Store.Get(id, clear)
 	// fix issue for some redis key-value string value
-	return strings.TrimSpace(value) == strings.TrimSpace(answer)
+	return strings.EqualFold(strings.TrimSpace(value), strings.TrimSpace(answer))
 }

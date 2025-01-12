@@ -1,20 +1,25 @@
 package base64Captcha
 
 import (
+	mathRand "math/rand"
 	"reflect"
 	"testing"
 
+	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/store"
 )
 
 func TestCaptcha_GenerateB64s(t *testing.T) {
 	type fields struct {
-		Driver Driver
+		Driver driver.Driver
 		Store  store.Store
 	}
 
-	dDigit := DriverDigit{80, 240, 5, 0.7, 5}
-	audioDriver := NewDriverAudio(randIntn(5), "en")
+	dDigit := driver.DriverDigit{Height: 80, Width: 240, Length: 5, MaxSkew: 0.7, DotCount: 5}
+	audioDriver := driver.NewDriverAudio(driver.DriverAudio{
+		Length:   randIntn(5),
+		Language: "en",
+	})
 	tests := []struct {
 		name     string
 		fields   fields
@@ -22,12 +27,12 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 		wantB64s string
 		wantErr  bool
 	}{
-		{"mem-digit", fields{&dDigit, store.DefaultMemoryStore}, "xxxx", "", false},
-		{"mem-audio", fields{audioDriver, store.DefaultMemoryStore}, "xxxx", "", false},
+		{"mem-digit", fields{&dDigit, store.DefaultStoreMemory}, "xxxx", "", false},
+		{"mem-audio", fields{audioDriver, store.DefaultStoreMemory}, "xxxx", "", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := NewCaptcha(tt.fields.Driver).SetStore(tt.fields.Store)
+			c := NewCaptcha(tt.fields.Driver, tt.fields.Store)
 			gotId, b64s, _, err := c.Generate()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Captcha.Generate() error = %v, wantErr %v", err, tt.wantErr)
@@ -45,7 +50,7 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 
 func TestCaptcha_Verify(t *testing.T) {
 	type fields struct {
-		Driver Driver
+		Driver driver.Driver
 		Store  store.Store
 	}
 	type args struct {
@@ -76,7 +81,7 @@ func TestCaptcha_Verify(t *testing.T) {
 
 func TestNewCaptcha(t *testing.T) {
 	type args struct {
-		driver Driver
+		driver driver.Driver
 		store  store.Store
 	}
 	tests := []struct {
@@ -88,7 +93,7 @@ func TestNewCaptcha(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewCaptcha(tt.args.driver).SetStore(tt.args.store); !reflect.DeepEqual(got, tt.want) {
+			if got := NewCaptcha(tt.args.driver, tt.args.store); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewCaptcha() = %v, want %v", got, tt.want)
 			}
 		})
@@ -120,4 +125,11 @@ func TestCaptcha_Generate(t *testing.T) {
 			}
 		})
 	}
+}
+
+func randIntn(n int) int {
+	if n > 0 {
+		return mathRand.Intn(n)
+	}
+	return 0
 }

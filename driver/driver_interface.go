@@ -1,9 +1,9 @@
-package base64Captcha
+package driver
 
 // Driver captcha interface for captcha engine to write staff
 type Driver interface {
 	// DrawCaptcha draws binary item
 	DrawCaptcha(content string) (item Item, err error)
-	// GenerateIdQuestionAnswer creates rand id, content and answer
-	GenerateIdQuestionAnswer() (id, q, a string)
+	// GenerateCaptcha creates rand id, content and answer
+	GenerateCaptcha() (id, q, a string)
 }

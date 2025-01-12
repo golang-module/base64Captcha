@@ -3,11 +3,12 @@ package base64Captcha
 import (
 	"testing"
 
+	"github.com/golang-module/base64Captcha/driver"
 	"github.com/golang-module/base64Captcha/store"
 )
 
 func TestHandlerCaptchaGenerate(t *testing.T) {
-	driver := &DriverString{
+	d := &driver.DriverString{
 		Height:          80,
 		Width:           240,
 		NoiseCount:      10,
@@ -18,7 +19,7 @@ func TestHandlerCaptchaGenerate(t *testing.T) {
 		Fonts:           nil,
 	}
 
-	c := NewCaptcha(driver, store.DefaultMemoryStore)
+	c := NewCaptcha(d, store.DefaultStoreMemory)
 
 	id, _, _, err := c.Generate()
 	if err != nil {

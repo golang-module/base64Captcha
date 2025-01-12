@@ -1,4 +1,4 @@
-package fonts
+package font
 
 import "embed"
 
@@ -6,6 +6,6 @@ import "embed"
 //
 //go:embed sources/*.ttf
 //go:embed sources/*.ttc
-var defaultSource embed.FS
+var defaultFont embed.FS
 
-var DefaultSource = NewSource(defaultSource)
+var DefaultFont = NewFont(defaultFont)

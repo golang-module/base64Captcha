@@ -1,4 +1,4 @@
-package base64Captcha
+package driver
 
 import (
 	"bytes"
@@ -25,10 +25,9 @@ type ItemDigit struct {
 	dotSize  int
 	dotCount int
 	maxSkew  float64
-	// rng      siprng
 }
 
-// NewItemDigit create a instance of item-digit
+// NewItemDigit create an instance of item-digit
 func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDigit {
 	itemDigit := &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
 	// init image.Paletted
@@ -36,16 +35,28 @@ func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDig
 	return itemDigit
 }
 
+// Writer writes captcha character in png format into the given io.Writer, and
+// returns the number of bytes written and an error if any.
+func (m *ItemDigit) Writer(w io.Writer) (int64, error) {
+	n, err := w.Write(m.encodeBinary())
+	return int64(n), err
+}
+
+// Encoder encodes an image to base64 string
+func (m *ItemDigit) Encoder() string {
+	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(m.encodeBinary()))
+}
+
 func createRandPaletteColors(dotCount int) color.Palette {
 	p := make([]color.Color, dotCount+1)
 	// Transparent color.
-	p[0] = color.RGBA{0xFF, 0xFF, 0xFF, 0x00}
+	p[0] = color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF}
 	// Primary color.
 	prim := color.RGBA{
-		uint8(randIntn(129)),
-		uint8(randIntn(129)),
-		uint8(randIntn(129)),
-		0xFF,
+		R: uint8(RandomInt(129)),
+		G: uint8(RandomInt(129)),
+		B: uint8(RandomInt(129)),
+		A: 0xFF,
 	}
 
 	if dotCount == 0 {
@@ -132,31 +143,28 @@ func (m *ItemDigit) drawCircle(x, y, radius int, colorIdx uint8) {
 }
 
 func (m *ItemDigit) fillWithCircles(n, maxradius int) {
-	maxx := m.Bounds().Max.X
-	maxy := m.Bounds().Max.Y
+	maxX := m.Bounds().Max.X
+	maxY := m.Bounds().Max.Y
 	for i := 0; i < n; i++ {
-		// colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
-		colorIdx := uint8(randIntRange(1, m.dotCount-1))
-		// r := m.rng.Int(1, maxradius)
-		r := randIntRange(1, maxradius)
-		// m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
-		m.drawCircle(randIntRange(r, maxx-r), randIntRange(r, maxy-r), r, colorIdx)
+		colorIdx := uint8(RandomRange(1, m.dotCount-1))
+		r := RandomRange(1, maxradius)
+		m.drawCircle(RandomRange(r, maxX-r), RandomRange(r, maxY-r), r, colorIdx)
 	}
 }
 
 func (m *ItemDigit) strikeThrough() {
-	maxx := m.Bounds().Max.X
-	maxy := m.Bounds().Max.Y
-	y := randIntRange(maxy/3, maxy-maxy/3)
-	amplitude := randFloat64Range(5, 20)
-	period := randFloat64Range(80, 180)
+	maxX := m.Bounds().Max.X
+	maxY := m.Bounds().Max.Y
+	y := RandomRange(maxY/3, maxY-maxY/3)
+	amplitude := RandomRange(5.0, 20.0)
+	period := RandomRange(80.0, 180.0)
 	dx := 2.0 * math.Pi / period
-	for x := 0; x < maxx; x++ {
+	for x := 0; x < maxX; x++ {
 		xo := amplitude * math.Cos(float64(y)*dx)
 		yo := amplitude * math.Sin(float64(x)*dx)
 		for yn := 0; yn < m.dotSize; yn++ {
 			// r := m.rng.Int(0, m.dotSize)
-			r := randIntn(m.dotSize)
+			r := RandomInt(m.dotSize)
 			m.drawCircle(x+int(xo), y+int(yo)+(yn*m.dotSize), r/2, 1)
 		}
 	}
@@ -164,10 +172,10 @@ func (m *ItemDigit) strikeThrough() {
 
 // draw digit
 func (m *ItemDigit) drawDigit(digit []byte, x, y int) {
-	skf := randFloat64Range(-m.maxSkew, m.maxSkew)
+	skf := RandomRange(-m.maxSkew, m.maxSkew)
 	xs := float64(x)
 	r := m.dotSize / 2
-	y += randIntRange(-r, r)
+	y += RandomRange(-r, r)
 	for yo := 0; yo < digitFontHeight; yo++ {
 		for xo := 0; xo < digitFontWidth; xo++ {
 			if digit[yo*digitFontWidth+xo] != digitFontBlackChar {
@@ -184,32 +192,32 @@ func (m *ItemDigit) distort(amplude float64, period float64) {
 	w := m.Bounds().Max.X
 	h := m.Bounds().Max.Y
 
-	oldm := m.Paletted
-	newm := image.NewPaletted(image.Rect(0, 0, w, h), oldm.Palette)
+	oldItem := m.Paletted
+	newItem := image.NewPaletted(image.Rect(0, 0, w, h), oldItem.Palette)
 
 	dx := 2.0 * math.Pi / period
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
 			xo := amplude * math.Sin(float64(y)*dx)
 			yo := amplude * math.Cos(float64(x)*dx)
-			newm.SetColorIndex(x, y, oldm.ColorIndexAt(x+int(xo), y+int(yo)))
+			newItem.SetColorIndex(x, y, oldItem.ColorIndexAt(x+int(xo), y+int(yo)))
 		}
 	}
-	m.Paletted = newm
+	m.Paletted = newItem
 }
 
 func randomBrightness(c color.RGBA, max uint8) color.RGBA {
-	minc := min3(c.R, c.G, c.B)
-	maxc := max3(c.R, c.G, c.B)
-	if maxc > max {
+	minC := min3(c.R, c.G, c.B)
+	maxC := max3(c.R, c.G, c.B)
+	if maxC > max {
 		return c
 	}
-	n := randIntn(int(max-maxc)) - int(minc)
+	n := RandomInt(int(max-maxC)) - int(minC)
 	return color.RGBA{
-		uint8(int(c.R) + n),
-		uint8(int(c.G) + n),
-		uint8(int(c.B) + n),
-		c.A,
+		R: uint8(int(c.R) + n),
+		G: uint8(int(c.G) + n),
+		B: uint8(int(c.B) + n),
+		A: c.A,
 	}
 }
 
@@ -235,8 +243,8 @@ func max3(x, y, z uint8) (m uint8) {
 	return
 }
 
-// EncodeBinary encodes an image to PNG and returns a byte slice.
-func (m *ItemDigit) EncodeBinary() []byte {
+// encodeBinary encodes an image to PNG and returns a byte slice.
+func (m *ItemDigit) encodeBinary() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, m.Paletted); err != nil {
 		panic(err.Error())
@@ -244,14 +252,20 @@ func (m *ItemDigit) EncodeBinary() []byte {
 	return buf.Bytes()
 }
 
-// WriteTo writes captcha character in png format into the given io.Writer, and
-// returns the number of bytes written and an error if any.
-func (m *ItemDigit) WriteTo(w io.Writer) (int64, error) {
-	n, err := w.Write(m.EncodeBinary())
-	return int64(n), err
+// converts string to digits
+func string2digits(content string) []byte {
+	digits := make([]byte, len(content))
+	for idx, cc := range content {
+		digits[idx] = byte(cc - '0')
+	}
+	return digits
 }
 
-// EncodeB64string encodes an image to base64 string
-func (m *ItemDigit) EncodeB64string() string {
-	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(m.EncodeBinary()))
+// converts digits to string
+func digits2String(bytes []byte) string {
+	stringB := make([]byte, len(bytes))
+	for idx, by := range bytes {
+		stringB[idx] = by + '0'
+	}
+	return string(stringB)
 }
