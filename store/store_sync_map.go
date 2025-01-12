@@ -17,7 +17,7 @@ type storeSyncMap struct {
 	d time.Duration
 }
 
-// NewStoreSyncMap new a instance
+// NewStoreSyncMap create a new sync map store
 func NewStoreSyncMap(duration time.Duration) *storeSyncMap {
 	return &storeSyncMap{d: duration, m: new(sync.Map)}
 }
