@@ -47,11 +47,26 @@ base64Driver := driver.NewDriverDigit(driver.DriverDigit{
     Width:    240, // 宽度
     Height:   80,  // 高度
     Length:   6,   // 长度
-    DotCount: 80,  // 点数量
-    MaxSkew:  0.7, // 随机弧度
+    NoiseCount: 2, // 点数量
+    MaxSkew: 0.1,  // 点数量
 })
 ```
 ![digit](assets/digit.png)
+##### 2、配置纯字母验证码
+```go
+// 使用默认配置
+base64Driver := driver.DefaultDriverLetter
+
+// 使用自定义配置
+base64Driver := driver.NewDriverLetter(driver.DriverLetter{
+    Width:    240,  // 宽度
+    Height:   80,   // 高度
+    Length:   6,    // 长度
+    NoiseCount: 2, // 点数量
+})
+```
+
+![letter](assets/letter.png)
 ##### 2、配置数学运算验证码
 ```go
 // 使用默认配置
@@ -61,14 +76,14 @@ base64Driver := driver.DefaultDriverMath
 base64Driver := driver.NewDriverMath(driver.DriverMath{
     Width:           240, // 宽度
     Height:          80,  // 高度
-    NoiseCount:      0,   // 点数量
+    NoiseCount:      2,   // 点数量
     ShowLineOptions: 0,   // 显示线条 
     Fonts:           []string{"wqy-microhei.ttc"},        // 显示字体
     BgColor:         &color.RGBA{R: 0, G: 0, B: 0, A: 0}, // 背景颜色
 })
 ```
 ![math](assets/math.png)
-##### 3、配置字符串验证码
+##### 3、配置字符串验证码(包含数字、大小写字母)
 ```go
 // 使用默认配置
 base64Driver := driver.DefaultDriverString
@@ -78,7 +93,7 @@ base64Driver := driver.NewDriverString(driver.DriverString{
     Width:           240, // 宽度
     Height:          80,  // 高度
     Length:          6,   // 长度
-    NoiseCount:      0,   // 点数量
+    NoiseCount:      2,   // 点数量
     ShowLineOptions: 0,   // 显示线条
     Source:          "ABCDEFGHJKMNOQRSTUVXYZabcdefghjkmnoqrstuvxyz", // 字符源
     Fonts:           []string{"wqy-microhei.ttc"},        // 显示字体
@@ -96,7 +111,7 @@ base64Driver := driver.NewDriverChinese(driver.DriverChinese{
     Width:           240, // 宽度
     Height:          80,  // 高度
     Length:          6,   // 长度
-    NoiseCount:      0,   // 点数量
+    NoiseCount:      2,   // 点数量
     ShowLineOptions: 0,   // 显示线条
     Source:          "设想,你在,处理,消费者,的音,频输,出音,频可,能无,论什,么都,没有,任何,输出,或者,它可,能是,单声道,立体声,或是,环绕立,体声的,,不想要,的值",  // 字符源
     Fonts:           []string{"wqy-microhei.ttc"},              // 显示字体
