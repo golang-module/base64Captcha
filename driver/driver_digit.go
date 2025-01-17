@@ -6,14 +6,18 @@ import (
 
 // DriverDigit config for captcha-engine-digit.
 type DriverDigit struct {
-	// Height png height in pixel.
-	Height int
 	// Width Captcha png width in pixel.
 	Width int
+
+	// Height png height in pixel.
+	Height int
+
 	// DefaultLen Default number of digits in captcha solution.
 	Length int
+
 	// MaxSkew max absolute skew factor of a single digit.
 	MaxSkew float64
+
 	// DotCount Number of background circles.
 	DotCount int
 }

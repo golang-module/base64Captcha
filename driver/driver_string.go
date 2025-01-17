@@ -10,20 +10,20 @@ import (
 
 // DriverString captcha config for captcha-engine-characters.
 type DriverString struct {
+	// Width Captcha png width in pixel.
+	Width int
+
 	// Height png height in pixel.
 	Height int
 
-	// Width Captcha png width in pixel.
-	Width int
+	// Length random string length.
+	Length int
 
 	// NoiseCount text noise count.
 	NoiseCount int
 
 	// ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
 	ShowLineOptions int
-
-	// Length random string length.
-	Length int
 
 	// Source is a Unicode which is the rand string from.
 	Source string
