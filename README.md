@@ -21,24 +21,38 @@
 
 ```go
 go get -u github.com/golang-module/base64Captcha
-import "github.com/golang-module/base64Captcha
 ```
 
 #### 用法示例
 
 ```go
-storer import "github.com/golang-module/base64Captcha/store
+import "github.com/golang-module/base64Captcha/store
 
-// 使用内存存储
-store = storer.DefaultMemoryStore
-// 或者使用 sync map 存储
-store = storer.DefaultSyncMapStore
+// 使用内存存储(默认)
+base64Store := store.DefaultMemoryStore
+
+// 使用 sync map 存储
+base64Store := store.DefaultSyncMapStore
 ```
 
 ##### 生成纯数字验证码
 ```go
-driver = base64Captcha.NewDriverDigit(80, 240, 4, 0.8, 80)
-captcha := base64Captcha.NewCaptcha(driver, storer)
+// 使用默认配置
+base64Driver := driver.DefaultDriverDigit
+
+// 使用自定义配置
+base64Driver := driver.NewDriverDigit(driver.DriverDigit{
+    Width:    240, // 宽度
+    Height:   80,  // 高度
+    Length:   6,   // 长度
+    MaxSkew:  0.7, // 随机弧度
+    DotCount: 80,  // 点数量
+})
+```
+
+##### 生成、验证
+```go
+captcha := base64Captcha.NewCaptcha(base64Driver, base64Store)
 
 // 生成验证码
 id, src, answer, err = captcha.Generate()
