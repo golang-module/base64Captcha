@@ -12,7 +12,7 @@ import (
 )
 
 // Version current version
-const Version = "1.3.8"
+const Version = "1.3.9"
 
 // Captcha basic information.
 type Captcha struct {
