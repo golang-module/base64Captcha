@@ -10,8 +10,8 @@ var DefaultDriverAudio = &DriverAudio{
 
 // DefaultDriverMath is a default math driver
 var DefaultDriverMath = &DriverMath{
-	Height:          80,
 	Width:           240,
+	Height:          80,
 	ShowLineOptions: 0,
 	NoiseCount:      0,
 	Fonts:           []string{"wqy-microhei.ttc"},
@@ -20,8 +20,8 @@ var DefaultDriverMath = &DriverMath{
 
 // DefaultDriverDigit is a default digit driver
 var DefaultDriverDigit = &DriverDigit{
-	Height:   80,
 	Width:    240,
+	Height:   80,
 	Length:   6,
 	MaxSkew:  0.7,
 	DotCount: 80,
@@ -29,8 +29,8 @@ var DefaultDriverDigit = &DriverDigit{
 
 // DefaultDriverString is a default string driver
 var DefaultDriverString = &DriverString{
-	Height:          80,
 	Width:           240,
+	Height:          80,
 	Length:          6,
 	ShowLineOptions: 0,
 	NoiseCount:      0,
@@ -41,8 +41,8 @@ var DefaultDriverString = &DriverString{
 
 // DefaultDriverChinese is a default chinese driver
 var DefaultDriverChinese = &DriverChinese{
-	Height:          80,
 	Width:           240,
+	Height:          80,
 	Length:          6,
 	ShowLineOptions: 0,
 	NoiseCount:      0,
