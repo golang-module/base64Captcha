@@ -45,7 +45,7 @@ base64Driver := driver.DefaultDriverDigit
 // 使用自定义配置
 base64Driver := driver.NewDriverDigit(driver.DriverDigit{
     Width:    240, // 宽度
-    Height:   80,  // 高度
+    Height:   60,  // 高度
     Length:   6,   // 长度
     NoiseCount: 2, // 点数量
     MaxSkew: 0.1,  // 点数量
@@ -60,7 +60,7 @@ base64Driver := driver.DefaultDriverLetter
 // 使用自定义配置
 base64Driver := driver.NewDriverLetter(driver.DriverLetter{
     Width:    240,  // 宽度
-    Height:   80,   // 高度
+    Height:   60,   // 高度
     Length:   6,    // 长度
     NoiseCount: 2, // 点数量
 })
@@ -75,7 +75,7 @@ base64Driver := driver.DefaultDriverMath
 // 使用自定义配置
 base64Driver := driver.NewDriverMath(driver.DriverMath{
     Width:           240, // 宽度
-    Height:          80,  // 高度
+    Height:          60,  // 高度
     NoiseCount:      2,   // 点数量
     ShowLineOptions: 0,   // 显示线条 
     Fonts:           []string{"wqy-microhei.ttc"},        // 显示字体
@@ -91,7 +91,7 @@ base64Driver := driver.DefaultDriverString
 // 使用自定义配置
 base64Driver := driver.NewDriverString(driver.DriverString{
     Width:           240, // 宽度
-    Height:          80,  // 高度
+    Height:          60,  // 高度
     Length:          6,   // 长度
     NoiseCount:      2,   // 点数量
     ShowLineOptions: 0,   // 显示线条
@@ -109,7 +109,7 @@ base64Driver := driver.DefaultDriverChinese
 // 使用自定义配置
 base64Driver := driver.NewDriverChinese(driver.DriverChinese{
     Width:           240, // 宽度
-    Height:          80,  // 高度
+    Height:          60,  // 高度
     Length:          6,   // 长度
     NoiseCount:      2,   // 点数量
     ShowLineOptions: 0,   // 显示线条
