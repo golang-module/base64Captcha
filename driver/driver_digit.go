@@ -15,11 +15,11 @@ type DriverDigit struct {
 	// DefaultLen Default number of digits in captcha solution.
 	Length int
 
-	// MaxSkew max absolute skew factor of a single digit.
-	MaxSkew float64
-
 	// DotCount Number of background circles.
 	DotCount int
+
+	// MaxSkew max absolute skew factor of a single digit.
+	MaxSkew float64
 }
 
 // NewDriverDigit creates a driver of digit
