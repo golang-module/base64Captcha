@@ -35,7 +35,7 @@ base64Store := store.DefaultMemoryStore
 base64Store := store.DefaultSyncMapStore
 ```
 #### 驱动配置
-> 自定义配置时可以只定义需要修改的配置，其他配置将使用默认配置
+> 自定义配置时可以只定义需要修改的配置项，其他配置项将使用默认配置项
 
 ##### 1、配置纯数字验证码
 ```go
@@ -51,7 +51,7 @@ base64Driver := driver.NewDriverDigit(driver.DriverDigit{
     MaxSkew:  0.7, // 随机弧度
 })
 ```
-
+![digit](assets/digit.png)
 ##### 2、配置数学运算验证码
 ```go
 // 使用默认配置
@@ -67,7 +67,7 @@ base64Driver := driver.NewDriverMath(driver.DriverMath{
     BgColor:         &color.RGBA{R: 0, G: 0, B: 0, A: 0}, // 背景颜色
 })
 ```
-
+![math](assets/math.png)
 ##### 3、配置字符串验证码
 ```go
 // 使用默认配置
@@ -85,7 +85,7 @@ base64Driver := driver.NewDriverString(driver.DriverString{
     BgColor:         &color.RGBA{R: 0, G: 0, B: 0, A: 0}, // 背景颜色
 })
 ```
-
+![string](assets/string.png)
 ##### 4、配置汉字验证码
 ```go
 // 使用默认配置
@@ -103,6 +103,7 @@ base64Driver := driver.NewDriverChinese(driver.DriverChinese{
     BgColor:         &color.RGBA{R: 125, G: 125, B: 0, A: 118}, // 背景颜色
 })
 ```
+![chinese](assets/chinese.png)
 
 ##### 5、配置语音验证码
 ```go
@@ -115,8 +116,9 @@ base64Driver := driver.NewDriverAudio(driver.DriverAudio{
     Language: "en", // 语言，目前支持：en、zh、ja、ru、de
 })
 ```
+![audio](assets/audio.png)
 
-##### 生成、验证
+##### 生成验证码
 ```go
 captcha := base64Captcha.NewCaptcha(base64Driver, base64Store)
 
