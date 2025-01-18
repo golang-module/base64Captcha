@@ -252,3 +252,21 @@ func (a *ItemAudio) makeBackgroundSound(length int) []byte {
 	}
 	return noise
 }
+
+// converts string to digits
+func string2digits(content string) []byte {
+	digits := make([]byte, len(content))
+	for idx, cc := range content {
+		digits[idx] = byte(cc - '0')
+	}
+	return digits
+}
+
+// converts digits to string
+func digits2String(bytes []byte) string {
+	stringB := make([]byte, len(bytes))
+	for idx, by := range bytes {
+		stringB[idx] = by + '0'
+	}
+	return string(stringB)
+}
