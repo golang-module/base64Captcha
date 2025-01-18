@@ -8,11 +8,10 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-// DriverString captcha config for captcha-engine-characters.
+// DriverString config for string driver.
 type DriverString struct {
 	// Width Captcha png width in pixel.
 	Width int
-
 	// Height png height in pixel.
 	Height int
 
@@ -36,7 +35,7 @@ type DriverString struct {
 	fontsArray []*truetype.Font
 }
 
-// NewDriverString creates driver
+// NewDriverString creates a string driver.
 func NewDriverString(d DriverString) *DriverString {
 	defaultFont := font.DefaultFont
 	fontsArray := defaultFont.LoadFonts(d.Fonts)
@@ -46,9 +45,8 @@ func NewDriverString(d DriverString) *DriverString {
 	return mergeDriverString(d)
 }
 
-// DrawCaptcha draws captcha item
+// DrawCaptcha draws captcha item for string driver.
 func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
-
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
@@ -91,7 +89,7 @@ func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 	return itemChar, nil
 }
 
-// GenerateCaptcha creates id,content and answer
+// GenerateCaptcha generates id,content and answer for string driver.
 func (d *DriverString) GenerateCaptcha() (id, content, answer string) {
 	id = RandomString()
 	content = RandomText(d.Length, d.Source)
@@ -120,12 +118,6 @@ func mergeDriverString(d DriverString) *DriverString {
 	}
 	if len(d.Fonts) == 0 {
 		d.Fonts = DefaultDriverString.Fonts
-	}
-	if d.BgColor == nil {
-		d.BgColor = DefaultDriverString.BgColor
-	}
-	if len(d.fontsArray) == 0 {
-		d.fontsArray = DefaultDriverString.fontsArray
 	}
 	return &d
 }
