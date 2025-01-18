@@ -48,7 +48,6 @@ base64Driver := driver.NewDriverDigit(driver.DriverDigit{
     Height:   60,  // 高度
     Length:   6,   // 长度
     NoiseCount: 2, // 点数量
-    MaxSkew: 0.1,  // 点数量
 })
 ```
 ![digit](assets/digit.png)
@@ -63,6 +62,9 @@ base64Driver := driver.NewDriverLetter(driver.DriverLetter{
     Height:   60,   // 高度
     Length:   6,    // 长度
     NoiseCount: 2, // 点数量
+    Source: "ABCDEFGHJKMNOQRSTUVXYZabcdefghjkmnoqrstuvxyz",
+    Fonts:           []string{"wqy-microhei.ttc"},        // 显示字体
+    BgColor: &color.RGBA{R: 0, G: 0, B: 0, A: 0}, // 背景颜色
 })
 ```
 
