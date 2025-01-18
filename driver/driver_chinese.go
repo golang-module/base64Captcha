@@ -8,7 +8,7 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-// DriverChinese is a driver of Unicode Chinese characters.
+// DriverChinese config for chinese driver.
 type DriverChinese struct {
 	// Width Captcha png width in pixel.
 	Width int
@@ -46,7 +46,7 @@ func NewDriverChinese(d DriverChinese) *DriverChinese {
 	return mergeDriverChinese(d)
 }
 
-// GenerateCaptcha generates captcha content and its answer
+// GenerateCaptcha generates captcha id, content and answer for chinese driver.
 func (d *DriverChinese) GenerateCaptcha() (id, content, answer string) {
 	id = RandomString()
 	ss := strings.Split(d.Source, ",")
@@ -69,7 +69,7 @@ func (d *DriverChinese) GenerateCaptcha() (id, content, answer string) {
 	return id, content, content
 }
 
-// DrawCaptcha generates captcha item(image)
+// DrawCaptcha draws captcha item for chinese driver.
 func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
@@ -113,7 +113,7 @@ func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
 	return itemChar, nil
 }
 
-// mergeDriverChinese merges default driver with given chinese driver
+// mergeDriverChinese merges default driver with given chinese driver.
 func mergeDriverChinese(d DriverChinese) *DriverChinese {
 	if d.Height == 0 {
 		d.Height = DefaultDriverString.Height
@@ -135,12 +135,6 @@ func mergeDriverChinese(d DriverChinese) *DriverChinese {
 	}
 	if len(d.Fonts) == 0 {
 		d.Fonts = DefaultDriverString.Fonts
-	}
-	if d.BgColor == nil {
-		d.BgColor = DefaultDriverString.BgColor
-	}
-	if len(d.fontsArray) == 0 {
-		d.fontsArray = DefaultDriverString.fontsArray
 	}
 	return &d
 }
