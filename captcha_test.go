@@ -15,7 +15,7 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 		Store  store.Store
 	}
 
-	dDigit := driver.DriverDigit{Height: 80, Width: 240, Length: 5, MaxSkew: 0.7, DotCount: 5}
+	dDigit := driver.DriverDigit{Height: 80, Width: 240, Length: 5}
 	audioDriver := driver.NewDriverAudio(driver.DriverAudio{
 		Length:   randIntn(5),
 		Language: "en",
