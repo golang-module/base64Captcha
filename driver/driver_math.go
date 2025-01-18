@@ -10,7 +10,12 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-// DriverMath captcha config for captcha math
+type Fonts struct {
+	Name []string
+	Data []*truetype.Font
+}
+
+// DriverMath config for math driver.
 type DriverMath struct {
 	// Width Captcha png width in pixel.
 	Width int
@@ -32,17 +37,12 @@ type DriverMath struct {
 	fontsArray []*truetype.Font
 }
 
-// NewDriverMath creates a driver of math
+// NewDriverMath creates a math driver.
 func NewDriverMath(d DriverMath) *DriverMath {
-	defaultFont := font.DefaultFont
-	fontsArray := defaultFont.LoadFonts(d.Fonts)
-	if len(fontsArray) == 0 {
-		d.fontsArray = defaultFont.LoadAll()
-	}
 	return mergeDriverMath(d)
 }
 
-// DrawCaptcha creates math captcha item
+// DrawCaptcha draws captcha item for math driver.
 func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
@@ -84,31 +84,31 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	return itemChar, nil
 }
 
-// GenerateCaptcha creates id,captcha content and answer
+// GenerateCaptcha generates id, content and answer for math captcha.
 func (d *DriverMath) GenerateCaptcha() (id, question, answer string) {
 	id = RandomString()
 	operators := []string{"+", "-", "x"}
-	var mathResult int32
+	var result int32
 	switch operators[rand.Int31n(3)] {
 	case "+":
 		a := rand.Int31n(20)
 		b := rand.Int31n(20)
 		question = fmt.Sprintf("%d+%d=?", a, b)
-		mathResult = a + b
+		result = a + b
 	case "x":
 		a := rand.Int31n(10)
 		b := rand.Int31n(10)
 		question = fmt.Sprintf("%dx%d=?", a, b)
-		mathResult = a * b
+		result = a * b
 	default:
 		a := rand.Int31n(80) + rand.Int31n(20)
 		b := rand.Int31n(80)
 
 		question = fmt.Sprintf("%d-%d=?", a, b)
-		mathResult = a - b
+		result = a - b
 
 	}
-	answer = fmt.Sprintf("%d", mathResult)
+	answer = fmt.Sprintf("%d", result)
 	return
 }
 
@@ -128,12 +128,6 @@ func mergeDriverMath(d DriverMath) *DriverMath {
 	}
 	if len(d.Fonts) == 0 {
 		d.Fonts = DefaultDriverMath.Fonts
-	}
-	if d.BgColor == nil {
-		d.BgColor = DefaultDriverMath.BgColor
-	}
-	if len(d.fontsArray) == 0 {
-		d.fontsArray = DefaultDriverMath.fontsArray
 	}
 	return &d
 }
